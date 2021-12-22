@@ -1,6 +1,8 @@
 package com.company;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
 
@@ -49,7 +51,7 @@ public class AdamAsmaca {
         System.out.print("Harf Gir : ");
         Character girilenHarf = scn.next().toLowerCase().charAt(0);
         if (kelime.toLowerCase().contains(girilenHarf.toString().toLowerCase())) {
-            if(!Arrays.asList(bulunanHarfler).contains(girilenHarf)) {
+            if (!Arrays.asList(bulunanHarfler).contains(girilenHarf)) {
                 for (int i = 0; i < kelime.length(); i++) {
                     if (kelime.toLowerCase().charAt(i) == (char) girilenHarf.toString().toLowerCase().charAt(0)) {
                         bulunanHarfler[i] = girilenHarf;
@@ -63,8 +65,7 @@ public class AdamAsmaca {
                 if (scn.next().toLowerCase().equals("y")) {
                     System.out.println("Yeni Oyun Başladı");
                     YeniOyun();
-                }
-                else AnaMenu();
+                } else AnaMenu();
             } else Sor();
         } else {
             kalanHak--;
@@ -75,7 +76,7 @@ public class AdamAsmaca {
     private void YeniOyun() throws IOException {
         YeniKelimeCek();
         this.kalanHak = 8;
-        kacHarfBulundu =0;
+        kacHarfBulundu = 0;
         bulunanHarfler = new Character[kelime.length()];
         Sor();
     }
@@ -88,6 +89,7 @@ public class AdamAsmaca {
         System.out.println("Yeni Oyun                  ----> 1");
         System.out.println("Çıkış                      ----> 2");
         System.out.println("Kelime Listesi Yolu Ayarla ----> 3");
+        System.out.println("Liste Ayarları             ----> 4");
         System.out.print("-------->  ");
         String x = scn.nextLine();
         if (x.equals("1")) YeniOyun();
@@ -100,7 +102,122 @@ public class AdamAsmaca {
                 System.out.println("İşlem Başarılı");
             } else System.out.println("İşlem başarısız");
             AnaMenuSorgu();
-        } else AnaMenu();
+        }
+        else if(x.equals("4")){
+           ListeAyarlari();
+        }  else AnaMenu();
+    }
+
+    private void ListeAyarlari() throws IOException {
+        System.out.println("1-->    Liste veritabanı yolunu güncelle ");
+        System.out.println("2-->    Geçerli veritabanına yeni kelime ekle");
+        System.out.println("3-->    Yeni veri tabanı oluştur");
+        System.out.println("4-->    Ana menüye Dön");
+        System.out.print("----------> ");
+        String x = scn.nextLine();
+        switch (x) {
+            case "1": {
+                VeriYoluGuncelle();
+                break;
+            }
+            case "2": {
+                VeriTabaninaKelimeEkle();
+                break;
+            }
+            case "3": {
+                YeniVeriTabani();
+                break;
+            }
+            case "4": {
+                AnaMenu();
+                break;
+            }
+            default: {
+                ListeAyarlari();
+            }
+        }
+    }
+
+    private void VeriTabaninaKelimeEkle() {
+    }
+
+    private void YeniVeriTabani() throws IOException {
+        System.out.println("Yeni Veri tabanı yolu giriniz : ");
+        String x = scn.nextLine();
+        File f = new File(x);
+        if (f.exists()) {
+            System.out.println("Belirtilen adreste zaten bir dosya mevcut");
+            System.out.println("1-->Dosyanın içeriğini silip yeniden doldur");
+            System.out.println("2-->Dosyanın içeriğinin üzerine veri ekle");
+            System.out.println("3-->Yeni Dosya yolu gir");
+            System.out.println("4-->İptal et ve anamenüye dön");
+            System.out.println("----------->");
+            String a = scn.nextLine();
+            switch (a) {
+                case "1": {
+                    f.delete();
+                    f.createNewFile();
+                    while (true) {
+                        try (BufferedWriter bw = new BufferedWriter(new FileWriter(f))) {
+                            BoslukSpam();
+
+                            System.out.println(" Eklemek istediğiniz kelimeyi yazıp enter a basmanız yeterli.\n Ekleme işlemini sonlanırmak için İşlemi_Sonlandır yazıp enterlamanız yeterli");
+                            String yeniKelime = scn.nextLine();
+                            if (yeniKelime.equals("İşlemi_Sonlandır")) {
+                                bw.close();
+                                break;
+                            }
+                            bw.write(yeniKelime);
+                            bw.newLine();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    break;
+                }
+                case "2": {
+
+                    break;
+                }
+                case "3": {
+
+                    break;
+                }
+                case "4": {
+
+                    break;
+                }
+                default: {
+                }
+                AnaMenu();
+            }
+        }
+    }
+
+    private void VeriYoluGuncelle() throws IOException {
+        System.out.print("Yeni veritabanı yolunu giriniz : ");
+        String yeniVeriYolu = scn.nextLine();
+        File yeniVeriTabani = new File(yeniVeriYolu);
+        if (!yeniVeriTabani.exists()) {
+            System.out.println("Belirtilen konumda böyle bir dosya yok");
+        } else {
+            List<String> yeniKelimeListesi = new ArrayList<>();
+            Scanner kelimeCekici = new Scanner(yeniVeriTabani);
+            while (kelimeCekici.hasNextLine()) {
+                yeniKelimeListesi.add(kelimeCekici.nextLine());
+            }
+            if (kelimeListesi.size() == 0) {
+                System.out.println("Geçerli veritabanı dosyası içerisinde herhangi bir kelime yok");
+            } else {
+                System.out.println("Veritabanı bulundu.\nKelime Adedi : " + yeniKelimeListesi.size());
+                if (Eminmisin()) {
+                    kelimeDosyasi = yeniVeriTabani;
+                    kelimeListesi = yeniKelimeListesi;
+                } else {
+                    AnaMenuSorgu();
+                }
+            }
+        }
     }
 
     private void YeniKelimeCek() throws IOException {
@@ -110,7 +227,6 @@ public class AdamAsmaca {
             String yeniKelime = kelimeListesi.get(sira);
             kelimeListesi.remove(sira);
             kelime = yeniKelime;
-            System.out.println(yeniKelime);//guhıjokaefrıhtgofepdagfıhkspadf
         } else {
             System.out.println("Veri tabanında yeni kelime kalmadı");
             System.out.println("Çıkış yapmak için enter a basın");
@@ -148,18 +264,38 @@ public class AdamAsmaca {
         }
     }
 
+    private boolean Eminmisin() {
+        Boolean sonuc = null;
+        System.out.println("Bu işlemi gerçekleştirmek istediğine eminmisin(EVET/HAYIR giriniz)");
+        String x = scn.nextLine().toUpperCase();
+        if (x.equals("EVET")) {
+            sonuc = true;
+        } else if (x.equals("HAYIR")) {
+            sonuc = false;
+        } else Eminmisin();
+        return sonuc;
+    }
+
     private void BoslukSpam() {
         for (int i = 0; i < 50; i++) {
             System.out.println();
         }
     }
 
-    private void AnaMenuSorgu() throws IOException {
+    private void AnaMenuSorgu() {
         System.out.println();
         System.out.println();
         System.out.println("Ana menüye dönmek için enter a basın");
-        System.in.read();
-        AnaMenu();
+        try {
+            System.in.read();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            AnaMenu();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void AdamCiz(int i) {
