@@ -129,11 +129,11 @@ public class AdamAsmaca {
 
     private void ListeAyarlari() throws IOException {
         BoslukSpam();
-        System.out.println("1-->    Liste veritabanı yolunu güncelle ");
+        System.out.println("1-->    Kelime veritabanı yolunu güncelle ");
         System.out.println("2-->    Geçerli veritabanına yeni kelime ekle");
         System.out.println("3-->    Yeni veri tabanı oluştur");
-        System.out.println("4-->    Ana menüye Dön");
-        System.out.println("5-->    Geçerli veritabanı dosyalarını listele");
+        System.out.println("4-->    Geçerli veritabanı dosyalarını listele");
+        System.out.println("5-->    Ana menüye Dön");
         CizgiSpam();
         String x = scn.nextLine();
         switch (x) {
@@ -147,10 +147,10 @@ public class AdamAsmaca {
                 YeniVeriTabani();
             }
             case "4" -> {
-                AnaMenu();
+                KelimeleriListele();
             }
             case "5" ->{
-                KelimeleriListele();
+                AnaMenu();
             }
 
             default -> {
@@ -319,7 +319,6 @@ public class AdamAsmaca {
         System.out.println("Ana menüye dönmek için enter a basın");
         System.in.read();
         AnaMenu();
-
     }
 
     private void AdamCiz(int i) {
