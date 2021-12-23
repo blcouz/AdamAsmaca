@@ -173,8 +173,13 @@ public class AdamAsmaca {
                 bw.close();
                 break;
             } else {
-                bw.newLine();
-                bw.write(yeniKelime);
+                if(AppendMode){
+                    bw.newLine();
+                    bw.write(yeniKelime);
+                }else {
+                    bw.write(yeniKelime);
+                    bw.newLine();
+                }
             }
         }
         Scanner kelimeCekici = new Scanner(fl);
