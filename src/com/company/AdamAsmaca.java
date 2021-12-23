@@ -6,6 +6,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
 
+@SuppressWarnings("ALL")
 public class AdamAsmaca {
     private List<String> kelimeListesi = new ArrayList<>();
     private String gecerliVeriYolu;
@@ -178,7 +179,7 @@ public class AdamAsmaca {
         }
         Scanner kelimeCekici = new Scanner(fl);
         kelimeListesi.clear();
-        while (kelimeCekici.hasNextLine()){
+        while (kelimeCekici.hasNextLine()) {
             kelimeListesi.add(kelimeCekici.nextLine());
         }
         System.out.println("İşlem tamamlandı");
@@ -189,7 +190,7 @@ public class AdamAsmaca {
         String dosyaAdi = scn.nextLine();
         System.out.println("Veri tabanını nereye kaydetmek istiyorsunuz (Örnek : C:/users/xxxx/desktop) : ");
         String y = scn.nextLine();
-        String x = y + dosyaAdi+".txt";
+        String x = y + dosyaAdi + ".txt";
         File f = new File(x);
         if (f.exists()) {
             System.out.println("Belirtilen adreste zaten bir dosya mevcut");
@@ -270,12 +271,13 @@ public class AdamAsmaca {
         Boolean sonuc = null;
         System.out.println("Bu işlemi gerçekleştirmek istediğine eminmisin(EVET/HAYIR giriniz)");
         String x = scn.nextLine().toUpperCase();
-        if (x.equals("EVET")) {
-            sonuc = true;
-        } else if (x.equals("HAYIR")) {
-            sonuc = false;
-        } else Eminmisin();
-        return sonuc;
+        while (true) {
+            if (x.equals("EVET")) {
+                sonuc = true;
+            } else if (x.equals("HAYIR")) {
+                sonuc = false;
+            }else System.out.println("Gerçekten ne yazman gerektiğini çözemedinmi ?");
+        }
     }
 
     private void BoslukSpam() {
@@ -284,25 +286,18 @@ public class AdamAsmaca {
         }
     }
 
-    private void AnaMenuSorgu() {
+    private void AnaMenuSorgu() throws IOException {
         System.out.println();
         System.out.println();
         System.out.println("Ana menüye dönmek için enter a basın");
-        try {
-            System.in.read();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
-            AnaMenu();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        System.in.read();
+        AnaMenu();
+
     }
 
     private void AdamCiz(int i) {
         switch (i) {
-            case 0: {
+            case 0 -> {
                 System.out.println("  __________________________________________");
                 System.out.println("  |               _______                  |");
                 System.out.println("  |               |     |                  |");
@@ -312,9 +307,8 @@ public class AdamAsmaca {
                 System.out.println("  |                     |                  |");
                 System.out.println("  |              --------                  |");
                 System.out.println("  |________________________________________|");
-                break;
             }
-            case 1: {
+            case 1 -> {
 
                 System.out.println("  __________________________________________");
                 System.out.println("  |               _______                  |");
@@ -325,9 +319,8 @@ public class AdamAsmaca {
                 System.out.println("  |                     |                  |");
                 System.out.println("  |              --------                  |");
                 System.out.println("  |________________________________________|");
-                break;
             }
-            case 2: {
+            case 2 -> {
 
                 System.out.println("  __________________________________________");
                 System.out.println("  |               _______                  |");
@@ -338,9 +331,8 @@ public class AdamAsmaca {
                 System.out.println("  |                     |                  |");
                 System.out.println("  |              --------                  |");
                 System.out.println("  |________________________________________|");
-                break;
             }
-            case 3: {
+            case 3 -> {
                 System.out.println("  __________________________________________");
                 System.out.println("  |               _______                  |");
                 System.out.println("  |                     |                  |");
@@ -350,9 +342,8 @@ public class AdamAsmaca {
                 System.out.println("  |                     |                  |");
                 System.out.println("  |              --------                  |");
                 System.out.println("  |________________________________________|");
-                break;
             }
-            case 4: {
+            case 4 -> {
                 System.out.println("  __________________________________________");
                 System.out.println("  |               _______                  |");
                 System.out.println("  |                     |                  |");
@@ -362,9 +353,8 @@ public class AdamAsmaca {
                 System.out.println("  |                     |                  |");
                 System.out.println("  |              --------                  |");
                 System.out.println("  |________________________________________|");
-                break;
             }
-            case 5: {
+            case 5 -> {
                 System.out.println("  __________________________________________");
                 System.out.println("  |               _______                  |");
                 System.out.println("  |                     |                  |");
@@ -374,9 +364,8 @@ public class AdamAsmaca {
                 System.out.println("  |                     |                  |");
                 System.out.println("  |              --------                  |");
                 System.out.println("  |________________________________________|");
-                break;
             }
-            case 6: {
+            case 6 -> {
 
                 System.out.println("  __________________________________________");
                 System.out.println("  |                                        |");
@@ -387,9 +376,8 @@ public class AdamAsmaca {
                 System.out.println("  |                     |                  |");
                 System.out.println("  |              --------                  |");
                 System.out.println("  |________________________________________|");
-                break;
             }
-            case 7: {
+            case 7 -> {
                 System.out.println("  __________________________________________");
                 System.out.println("  |                                        |");
                 System.out.println("  |                                        |");
@@ -399,9 +387,8 @@ public class AdamAsmaca {
                 System.out.println("  |                                        |");
                 System.out.println("  |              --------                  |");
                 System.out.println("  |________________________________________|");
-                break;
             }
-            case 8: {
+            case 8 -> {
                 System.out.println("  __________________________________________");
                 System.out.println("  |                                        |");
                 System.out.println("  |                                        |");
@@ -411,7 +398,6 @@ public class AdamAsmaca {
                 System.out.println("  |                                        |");
                 System.out.println("  |                                        |");
                 System.out.println("  |________________________________________|");
-                break;
             }
         }
     }
