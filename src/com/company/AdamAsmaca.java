@@ -79,6 +79,7 @@ public class AdamAsmaca {
             }
             if (kacHarfBulundu == kelime.length()) {
                 System.out.println("Oyun Bitti \n Kazandınız.");
+                AdamCiz(9);
                 System.out.println("Yeni Oyuna Başlamak için 'Y' yazıp enterlayın. ");
                 if (scn.next().toLowerCase().equals("y")) {
                     System.out.println("Yeni Oyun Başladı");
@@ -433,6 +434,17 @@ public class AdamAsmaca {
                 System.out.println("  |                                        |");
                 System.out.println("  |                                        |");
                 System.out.println("  |                                        |");
+                System.out.println("  |                                        |");
+                System.out.println("  |________________________________________|");
+            }
+            case 9 ->{
+                System.out.println("  __________________________________________");
+                System.out.println("  |                                        |");
+                System.out.println("  |                                        |");
+                System.out.println("  |      KAZANDIN                O         |");
+                System.out.println("  |   ---------------------->   /|\\        |");
+                System.out.println("  |   ---------------------->    |         |");
+                System.out.println("  |   ---------------------->   / \\        |");
                 System.out.println("  |                                        |");
                 System.out.println("  |________________________________________|");
             }
