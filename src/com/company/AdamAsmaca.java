@@ -115,7 +115,7 @@ public class AdamAsmaca {
                 ListeAyarlari();
             }
             case "3" ->{
-                System.out.println("Oyundan çıkmak için 'C' yazın");
+                System.out.println("Oyundan çıkmak için 'C' yazın c harici (Ana menü için enter a bas)");
                 String sonuc = scn.nextLine();
                 if(sonuc.toLowerCase().equals("c")){
                     System.exit(0);
