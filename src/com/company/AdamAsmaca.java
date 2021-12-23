@@ -1,10 +1,16 @@
 package com.company;
 
-import java.io.*;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.*;
 
 @SuppressWarnings("ALL")
 public class AdamAsmaca {
+    private int kazanilanOyunSayisi = 0;
+    private int kaybedilenOyunSayisi = 0;
+    private List<String> oynananKelimeler = new ArrayList<>();
     private List<String> kelimeListesi = new ArrayList<>();
     private String gecerliVeriYolu;
     private final Scanner scn = new Scanner(System.in);
@@ -19,7 +25,7 @@ public class AdamAsmaca {
             Scanner scanner = new Scanner(kelimeDosyasi);
             while (scanner.hasNextLine()) {
                 String kelime = scanner.nextLine();
-                if(kelime.equals("")|kelime.length()<51){
+                if (kelime.equals("") | kelime.length() < 51) {
                     kelimeListesi.add(kelime);
                 }
             }
@@ -64,6 +70,7 @@ public class AdamAsmaca {
         System.out.println();
         if (kalanHak == 0) {
             System.out.println("Oyun Bitti\nKaybettiniz\nKelime : " + kelime);
+            OynananlaraYeniSatirEkle(kelime, false);
             AnaMenuSorgu();
         }
         System.out.print("Harf Gir : ");
@@ -79,6 +86,7 @@ public class AdamAsmaca {
             }
             if (kacHarfBulundu == kelime.length()) {
                 System.out.println("Oyun Bitti \n Kazandınız.");
+                OynananlaraYeniSatirEkle(kelime, true);
                 BoslukSpam();
                 AdamCiz(9);
                 System.out.println("Yeni Oyuna Başlamak için 'Y'  \nAnamenü için 'A'yazıp enterlayın.");
@@ -91,6 +99,35 @@ public class AdamAsmaca {
             kalanHak--;
         }
         Sor();
+    }//Neredeyse tüm iş buradan dönüyor
+
+    private void OynananlaraYeniSatirEkle(String kelime, Boolean kazandimi) {
+        String metin = "Kelime : " + kelime + " : ";
+        if (kazandimi) {
+            kazanilanOyunSayisi++;
+            metin += "Kazandın";
+        } else {
+            kaybedilenOyunSayisi++;
+            metin += "Kaybettin";
+        }
+        oynananKelimeler.add(metin);
+    }
+
+    private void OynananKelimeleriListele() throws IOException {
+        BoslukSpam();
+        if (oynananKelimeler.size() != 0) {
+            System.out.println("----------Kelimeler---------");
+            for (int i = 0; i < oynananKelimeler.size(); i++) {
+                System.out.println("     " + oynananKelimeler.get(i));
+            }
+            System.out.println("----------------------------");
+            System.out.println("Kazanılan Oyun Sayısı : " + kazanilanOyunSayisi);
+            System.out.println("Kaybedilen Oyun Sayısı : " + kaybedilenOyunSayisi);
+        } else {
+            System.out.println("Daha önce oyun oynamadın neyin peşindesin");
+            AnaMenuSorgu();
+        }
+        AnaMenuSorgu();
     }
 
     private void YeniOyun() throws IOException {
@@ -105,24 +142,27 @@ public class AdamAsmaca {
         BoslukSpam();
         System.out.println("<-------------ANA MENÜ----------->");
         System.out.println("Yeni Oyun                  ----> 1");
-        System.out.println("Liste Ayarları             ----> 2");
-        System.out.println("Çıkış                      ----> 3");
+        System.out.println("Veritabanı Ayarları        ----> 2");
+        System.out.println("Oynanan Kelimeleri Listele ----> 3");
+        System.out.println("Çıkış                      ----> 4");
         CizgiSpam();
         String x = scn.nextLine();
-        switch (x){
-            case "1" ->{
+        switch (x) {
+            case "1" -> {
                 YeniOyun();
             }
-            case  "2" ->{
+            case "2" -> {
                 ListeAyarlari();
             }
-            case "3" ->{
+            case "3" -> {
+                OynananKelimeleriListele();
+            }
+            case "4" -> {
                 System.out.println("Oyundan çıkmak için 'C' yazın c harici (Ana menü için enter a bas)");
                 String sonuc = scn.nextLine();
-                if(sonuc.toLowerCase().equals("c")){
+                if (sonuc.toLowerCase().equals("c")) {
                     System.exit(0);
-                }
-                else {
+                } else {
                     AnaMenu();
                 }
             }
@@ -154,7 +194,7 @@ public class AdamAsmaca {
             case "4" -> {
                 KelimeleriListele();
             }
-            case "5" ->{
+            case "5" -> {
                 AnaMenu();
             }
 
@@ -170,12 +210,12 @@ public class AdamAsmaca {
         Scanner scanner = new Scanner(file);
         System.out.println("-----------KELİMELER----------");
         for (int i = 0; i < kelimeListesi.size(); i++) {
-            System.out.println("|             "+kelimeListesi.get(i));
+            System.out.println("|             " + kelimeListesi.get(i));
         }
         AnaMenuSorgu();
     }
 
-    private void CizgiSpam(){
+    private void CizgiSpam() {
         for (int i = 0; i < 5; i++) {
             System.out.println("|");
         }
@@ -202,10 +242,10 @@ public class AdamAsmaca {
                 bw.close();
                 break;
             } else {
-                if(AppendMode){
+                if (AppendMode) {
                     bw.newLine();
                     bw.write(yeniKelime);
-                }else {
+                } else {
                     bw.write(yeniKelime);
                     bw.newLine();
                 }
@@ -334,6 +374,7 @@ public class AdamAsmaca {
         AnaMenu();
     }
 
+
     private void AdamCiz(int i) {
         switch (i) {
             case 0 -> {
@@ -438,7 +479,7 @@ public class AdamAsmaca {
                 System.out.println("  |                                        |");
                 System.out.println("  |________________________________________|");
             }
-            case 9 ->{
+            case 9 -> {
                 System.out.println("  __________________________________________");
                 System.out.println("  |                                        |");
                 System.out.println("  |                                        |");
