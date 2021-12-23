@@ -63,7 +63,7 @@ public class AdamAsmaca {
         }
         System.out.println();
         if (kalanHak == 0) {
-            System.out.println("Oyun Bitti\nKaynettiniz\nKelime : " + kelime);
+            System.out.println("Oyun Bitti\nKaybettiniz\nKelime : " + kelime);
             AnaMenuSorgu();
         }
         System.out.print("Harf Gir : ");
