@@ -1,9 +1,6 @@
 package com.company;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 
 @SuppressWarnings("ALL")
@@ -132,30 +129,43 @@ public class AdamAsmaca {
         System.out.println("2-->    Geçerli veritabanına yeni kelime ekle");
         System.out.println("3-->    Yeni veri tabanı oluştur");
         System.out.println("4-->    Ana menüye Dön");
+        System.out.println("5-->    Geçerli veritabanı dosyalarını listele");
         CizgiSpam();
         String x = scn.nextLine();
         switch (x) {
-            case "1": {
+            case "1" -> {
                 VeriYoluGuncelle();
-                break;
             }
-            case "2": {
+            case "2" -> {
                 VeriTabaninaKelimeEkle();
-                break;
             }
-            case "3": {
+            case "3" -> {
                 YeniVeriTabani();
-                break;
             }
-            case "4": {
+            case "4" -> {
                 AnaMenu();
-                break;
             }
-            default: {
+            case "5" ->{
+                KelimeleriListele();
+            }
+
+            default -> {
                 ListeAyarlari();
             }
         }
     }
+
+    private void KelimeleriListele() throws IOException {
+        BoslukSpam();
+        File file = new File(gecerliVeriYolu);
+        Scanner scanner = new Scanner(file);
+        System.out.println("-----------KELİMELER----------");
+        for (int i = 0; i < kelimeListesi.size(); i++) {
+            System.out.println("|             "+kelimeListesi.get(i));
+        }
+        AnaMenuSorgu();
+    }
+
     private void CizgiSpam(){
         for (int i = 0; i < 5; i++) {
             System.out.println("|");
