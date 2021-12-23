@@ -103,24 +103,28 @@ public class AdamAsmaca {
         BoslukSpam();
         System.out.println("<-------------ANA MENÜ----------->");
         System.out.println("Yeni Oyun                  ----> 1");
-        System.out.println("Çıkış                      ----> 2");
-        System.out.println("Kelime Listesi Yolu Ayarla ----> 3");
-        System.out.println("Liste Ayarları             ----> 4");
+        System.out.println("Liste Ayarları             ----> 2");
+        System.out.println("Çıkış                      ----> 3");
         CizgiSpam();
         String x = scn.nextLine();
-        if (x.equals("1")) YeniOyun();
-        else if (x.equals("2")) System.exit(0);
-        else if (x.equals("3")) {
-            System.out.println("Yeni kelime listesinin tam yolunu giriniz.");
-            String yeniKelimeListesiYolu = scn.next();
-            File y = new File(yeniKelimeListesiYolu);
-            if (y.exists()) {
-                System.out.println("İşlem Başarılı");
-            } else System.out.println("İşlem başarısız");
-            AnaMenuSorgu();
-        } else if (x.equals("4")) {
-            ListeAyarlari();
-        } else AnaMenu();
+        switch (x){
+            case "1" ->{
+                YeniOyun();
+            }
+            case  "2" ->{
+                ListeAyarlari();
+            }
+            case "3" ->{
+                System.out.println("Oyundan çıkmak için 'C' yazın");
+                String sonuc = scn.nextLine();
+                if(sonuc.toLowerCase().equals("c")){
+                    System.exit(0);
+                }
+                else {
+                    AnaMenu();
+                }
+            }
+        }
     }
 
     private void ListeAyarlari() throws IOException {
