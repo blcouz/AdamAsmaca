@@ -8,7 +8,6 @@ import java.util.*;
 
 public class AdamAsmaca {
     List<String> kelimeListesi = new ArrayList<>();
-    File kelimeDosyasi;
     Scanner scn = new Scanner(System.in);
     private int kalanHak = 8;
     private String kelime;
@@ -16,7 +15,7 @@ public class AdamAsmaca {
     private int kacHarfBulundu = 0;
 
     AdamAsmaca(String path) throws IOException {
-        kelimeDosyasi = new File(path);
+        File kelimeDosyasi = new File(path);
         if (kelimeDosyasi.exists()) {
             Scanner scanner = new Scanner(kelimeDosyasi);
             while (scanner.hasNextLine()) {
@@ -102,10 +101,9 @@ public class AdamAsmaca {
                 System.out.println("İşlem Başarılı");
             } else System.out.println("İşlem başarısız");
             AnaMenuSorgu();
-        }
-        else if(x.equals("4")){
-           ListeAyarlari();
-        }  else AnaMenu();
+        } else if (x.equals("4")) {
+            ListeAyarlari();
+        } else AnaMenu();
     }
 
     private void ListeAyarlari() throws IOException {
@@ -155,42 +153,47 @@ public class AdamAsmaca {
             String a = scn.nextLine();
             switch (a) {
                 case "1": {
-                    f.delete();
-                    f.createNewFile();
+                    FileWriter fw = new FileWriter(f, false);
+                    BufferedWriter bw = new BufferedWriter(fw);
                     while (true) {
-                        try (BufferedWriter bw = new BufferedWriter(new FileWriter(f))) {
-                            BoslukSpam();
-
-                            System.out.println(" Eklemek istediğiniz kelimeyi yazıp enter a basmanız yeterli.\n Ekleme işlemini sonlanırmak için İşlemi_Sonlandır yazıp enterlamanız yeterli");
-                            String yeniKelime = scn.nextLine();
-                            if (yeniKelime.equals("İşlemi_Sonlandır")) {
-                                bw.close();
-                                break;
-                            }
-                            bw.write(yeniKelime);
-                            bw.newLine();
-                        } catch (IOException e) {
-                            e.printStackTrace();
+                        BoslukSpam();
+                        System.out.println(" Eklemek istediğiniz kelimeyi yazıp enter a basmanız yeterli.\n Ekleme işlemini sonlanırmak için İşlemi_Sonlandır yazıp enterlamanız yeterli");
+                        String yeniKelime = scn.nextLine();
+                        if (yeniKelime.equals("İşlemi_Sonlandır")) {
+                            bw.close();
+                            break;
                         }
+                        bw.write(yeniKelime);
+                        bw.newLine();
                     }
                     break;
                 }
                 case "2": {
-
+                    FileWriter fw = new FileWriter(f, true);
+                    BufferedWriter bw = new BufferedWriter(fw);
+                    while (true) {
+                        BoslukSpam();
+                        System.out.println(" Eklemek istediğiniz kelimeyi yazıp enter a basmanız yeterli.\n Ekleme işlemini sonlanırmak için İşlemi_Sonlandır yazıp enterlamanız yeterli");
+                        String yeniKelime = scn.nextLine();
+                        if (yeniKelime.equals("İşlemi_Sonlandır")) {
+                            bw.close();
+                            break;
+                        }
+                        bw.write(yeniKelime);
+                        bw.newLine();
+                    }
                     break;
                 }
                 case "3": {
-
+                    YeniVeriTabani();
                     break;
                 }
                 case "4": {
-
+                    AnaMenuSorgu();
                     break;
                 }
-                default: {
-                }
-                AnaMenu();
             }
+            AnaMenuSorgu();
         }
     }
 
@@ -211,7 +214,6 @@ public class AdamAsmaca {
             } else {
                 System.out.println("Veritabanı bulundu.\nKelime Adedi : " + yeniKelimeListesi.size());
                 if (Eminmisin()) {
-                    kelimeDosyasi = yeniVeriTabani;
                     kelimeListesi = yeniKelimeListesi;
                 } else {
                     AnaMenuSorgu();
@@ -235,34 +237,6 @@ public class AdamAsmaca {
         }
     }
 
-    private void KelimeleriListeyeCek() throws IOException {
-        if (kelimeDosyasi.exists()) {
-            Scanner f = new Scanner(kelimeDosyasi);
-            List<String> yeniListe = new ArrayList<>();
-            while (f.hasNextLine()) {
-                yeniListe.add(f.nextLine());
-            }
-            if (yeniListe.size() == 0) {
-                System.out.println("Dosya boş");
-                AnaMenuSorgu();
-            } else {
-                while (true) {
-                    BoslukSpam();
-                    System.out.println("Kelime listesi güncellemek için 'evet' yazıp enterlamanız gerek ");
-                    System.out.println("İşlemi iptal etmek için 'iptal' yazıp enterlamanız gerek");
-                    String sonuc = scn.next();
-                    if (sonuc.toLowerCase().equals("evet")) {
-                        AnaMenuSorgu();
-                    } else if (sonuc.toLowerCase().equals("iptal")) {
-                        AnaMenu();
-                    }
-
-                }
-            }
-        } else {
-            System.out.println("Geçersiz dosya yolu");
-        }
-    }
 
     private boolean Eminmisin() {
         Boolean sonuc = null;
@@ -301,93 +275,114 @@ public class AdamAsmaca {
     private void AdamCiz(int i) {
         switch (i) {
             case 0: {
-                System.out.println("                  _______                  ");
-                System.out.println("                  |     |                    ");
-                System.out.println("                 \\0/    |                     ");
-                System.out.println("                  |     |                   ");
-                System.out.println("                 / \\    |                      ");
-                System.out.println("                        |                   ");
-                System.out.println("                 --------                   ");
+                System.out.println("  __________________________________________");
+                System.out.println("  |               _______                  |");
+                System.out.println("  |               |     |                  |");
+                System.out.println("  |              \\0/    |                  |");
+                System.out.println("  |               |     |                  |");
+                System.out.println("  |              / \\    |                  |");
+                System.out.println("  |                     |                  |");
+                System.out.println("  |              --------                  |");
+                System.out.println("  |________________________________________|");
                 break;
             }
             case 1: {
-                System.out.println("                  _______                  ");
-                System.out.println("                        |                    ");
-                System.out.println("                 \\0/    |                     ");
-                System.out.println("                  |     |                   ");
-                System.out.println("                 / \\    |                      ");
-                System.out.println("                        |                   ");
-                System.out.println("                 --------                   ");
+
+                System.out.println("  __________________________________________");
+                System.out.println("  |               _______                  |");
+                System.out.println("  |                     |                  |");
+                System.out.println("  |              \\0/    |                  |");
+                System.out.println("  |               |     |                  |");
+                System.out.println("  |              / \\    |                  |");
+                System.out.println("  |                     |                  |");
+                System.out.println("  |              --------                  |");
+                System.out.println("  |________________________________________|");
                 break;
             }
             case 2: {
-                System.out.println("                  _______                  ");
-                System.out.println("                        |                    ");
-                System.out.println("                 \\0/    |                     ");
-                System.out.println("                  |     |                   ");
-                System.out.println("                        |                      ");
-                System.out.println("                        |                   ");
-                System.out.println("                 --------                   ");
+
+                System.out.println("  __________________________________________");
+                System.out.println("  |               _______                  |");
+                System.out.println("  |                     |                  |");
+                System.out.println("  |              \\0/    |                  |");
+                System.out.println("  |               |     |                  |");
+                System.out.println("  |                     |                  |");
+                System.out.println("  |                     |                  |");
+                System.out.println("  |              --------                  |");
+                System.out.println("  |________________________________________|");
                 break;
             }
             case 3: {
-                System.out.println("                  _______                  ");
-                System.out.println("                        |                    ");
-                System.out.println("                 \\0/    |                     ");
-                System.out.println("                        |                   ");
-                System.out.println("                        |                      ");
-                System.out.println("                        |                   ");
-                System.out.println("                 --------                   ");
+                System.out.println("  __________________________________________");
+                System.out.println("  |               _______                  |");
+                System.out.println("  |                     |                  |");
+                System.out.println("  |              \\0/    |                  |");
+                System.out.println("  |                     |                  |");
+                System.out.println("  |                     |                  |");
+                System.out.println("  |                     |                  |");
+                System.out.println("  |              --------                  |");
+                System.out.println("  |________________________________________|");
                 break;
             }
             case 4: {
-                System.out.println("                  _______                  ");
-                System.out.println("                        |                    ");
-                System.out.println("                  0     |                     ");
-                System.out.println("                        |                   ");
-                System.out.println("                        |                      ");
-                System.out.println("                        |                   ");
-                System.out.println("                 --------                   ");
+                System.out.println("  __________________________________________");
+                System.out.println("  |               _______                  |");
+                System.out.println("  |                     |                  |");
+                System.out.println("  |               0     |                  |");
+                System.out.println("  |                     |                  |");
+                System.out.println("  |                     |                  |");
+                System.out.println("  |                     |                  |");
+                System.out.println("  |              --------                  |");
+                System.out.println("  |________________________________________|");
                 break;
             }
             case 5: {
-                System.out.println("                  _______                  ");
-                System.out.println("                        |                    ");
-                System.out.println("                        |                     ");
-                System.out.println("                        |                   ");
-                System.out.println("                        |                      ");
-                System.out.println("                        |                   ");
-                System.out.println("                 --------                   ");
+                System.out.println("  __________________________________________");
+                System.out.println("  |               _______                  |");
+                System.out.println("  |                     |                  |");
+                System.out.println("  |                     |                  |");
+                System.out.println("  |                     |                  |");
+                System.out.println("  |                     |                  |");
+                System.out.println("  |                     |                  |");
+                System.out.println("  |              --------                  |");
+                System.out.println("  |________________________________________|");
                 break;
             }
             case 6: {
-                System.out.println("                                           ");
-                System.out.println("                        |                    ");
-                System.out.println("                        |                     ");
-                System.out.println("                        |                   ");
-                System.out.println("                        |                      ");
-                System.out.println("                        |                   ");
-                System.out.println("                 --------                   ");
+
+                System.out.println("  __________________________________________");
+                System.out.println("  |                                        |");
+                System.out.println("  |                     |                  |");
+                System.out.println("  |                     |                  |");
+                System.out.println("  |                     |                  |");
+                System.out.println("  |                     |                  |");
+                System.out.println("  |                     |                  |");
+                System.out.println("  |              --------                  |");
+                System.out.println("  |________________________________________|");
                 break;
             }
             case 7: {
-                System.out.println("                                           ");
-                System.out.println("                                            ");
-                System.out.println("                                             ");
-                System.out.println("                                           ");
-                System.out.println("                                              ");
-                System.out.println("                                           ");
-                System.out.println("                 --------                   ");
+                System.out.println("  __________________________________________");
+                System.out.println("  |                                        |");
+                System.out.println("  |                                        |");
+                System.out.println("  |                                        |");
+                System.out.println("  |                                        |");
+                System.out.println("  |                                        |");
+                System.out.println("  |                                        |");
+                System.out.println("  |              --------                  |");
+                System.out.println("  |________________________________________|");
                 break;
             }
             case 8: {
-                System.out.println("                                           ");
-                System.out.println("                                            ");
-                System.out.println("                                             ");
-                System.out.println("                                           ");
-                System.out.println("                                              ");
-                System.out.println("                                           ");
-                System.out.println("                                            ");
+                System.out.println("  __________________________________________");
+                System.out.println("  |                                        |");
+                System.out.println("  |                                        |");
+                System.out.println("  |                                        |");
+                System.out.println("  |                                        |");
+                System.out.println("  |                                        |");
+                System.out.println("  |                                        |");
+                System.out.println("  |                                        |");
+                System.out.println("  |________________________________________|");
                 break;
             }
         }
