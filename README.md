@@ -1,2 +1,3 @@
 # AdamAsmaca
+Main java dosyasındaki kodu güncelleyin aksi halde bilgisayarınızda hata alabilirsiniz.
 Hatalar gideriliyor...
