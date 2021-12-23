@@ -22,7 +22,7 @@ public class AdamAsmaca {
             Scanner scanner = new Scanner(kelimeDosyasi);
             while (scanner.hasNextLine()) {
                 String kelime = scanner.nextLine();
-                if(kelime.equals("")|kelime.length()<50){
+                if(kelime.equals("")|kelime.length()<51){
                     kelimeListesi.add(kelime);
                 }
             }
