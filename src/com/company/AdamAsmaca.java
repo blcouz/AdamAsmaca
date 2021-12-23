@@ -339,7 +339,7 @@ public class AdamAsmaca {
             System.in.read();
             System.exit(0);
         }
-    }
+    }//Kelime listesinden daha önce oynanmamış bir kelime çeker.
 
     private boolean Eminmisin() {
         Boolean sonuc = null;
@@ -373,7 +373,6 @@ public class AdamAsmaca {
         System.in.read();
         AnaMenu();
     }
-
 
     private void AdamCiz(int i) {
         switch (i) {
