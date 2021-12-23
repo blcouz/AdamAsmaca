@@ -21,7 +21,10 @@ public class AdamAsmaca {
         if (kelimeDosyasi.exists()) {
             Scanner scanner = new Scanner(kelimeDosyasi);
             while (scanner.hasNextLine()) {
-                kelimeListesi.add(scanner.nextLine());
+                String kelime = scanner.nextLine();
+                if(kelime.equals("")|kelime.length()<50){
+                    kelimeListesi.add(kelime);
+                }
             }
             if (kelimeListesi.size() != 0) {
                 gecerliVeriYolu = path;
@@ -101,14 +104,12 @@ public class AdamAsmaca {
 
     private void AnaMenu() throws IOException {
         BoslukSpam();
-        for (int i = 0; i < 10; i++) {
-            System.out.println();
-        }
+        System.out.println("<-------------ANA MENÜ----------->");
         System.out.println("Yeni Oyun                  ----> 1");
         System.out.println("Çıkış                      ----> 2");
         System.out.println("Kelime Listesi Yolu Ayarla ----> 3");
         System.out.println("Liste Ayarları             ----> 4");
-        System.out.print("-------->  ");
+        CizgiSpam();
         String x = scn.nextLine();
         if (x.equals("1")) YeniOyun();
         else if (x.equals("2")) System.exit(0);
@@ -126,11 +127,12 @@ public class AdamAsmaca {
     }
 
     private void ListeAyarlari() throws IOException {
+        BoslukSpam();
         System.out.println("1-->    Liste veritabanı yolunu güncelle ");
         System.out.println("2-->    Geçerli veritabanına yeni kelime ekle");
         System.out.println("3-->    Yeni veri tabanı oluştur");
         System.out.println("4-->    Ana menüye Dön");
-        System.out.print("----------> ");
+        CizgiSpam();
         String x = scn.nextLine();
         switch (x) {
             case "1": {
@@ -153,6 +155,12 @@ public class AdamAsmaca {
                 ListeAyarlari();
             }
         }
+    }
+    private void CizgiSpam(){
+        for (int i = 0; i < 5; i++) {
+            System.out.println("|");
+        }
+        System.out.print("---------------> ");
     }
 
     private void VeriTabaninaKelimeEkle() throws IOException {
