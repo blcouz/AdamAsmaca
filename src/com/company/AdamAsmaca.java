@@ -81,7 +81,7 @@ public class AdamAsmaca {
                 System.out.println("Oyun Bitti \n Kazandınız.");
                 BoslukSpam();
                 AdamCiz(9);
-                System.out.println("Yeni Oyuna Başlamak için 'Y' yazıp enterlayın. ");
+                System.out.println("Yeni Oyuna Başlamak için 'Y'  \nAnamenü için 'A'yazıp enterlayın.");
                 if (scn.next().toLowerCase().equals("y")) {
                     System.out.println("Yeni Oyun Başladı");
                     YeniOyun();
