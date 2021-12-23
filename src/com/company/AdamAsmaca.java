@@ -184,10 +184,12 @@ public class AdamAsmaca {
     }
 
     private void VeriTabaninaYaz(String dosyaYolu, Boolean AppendMode) throws IOException {
+        BoslukSpam();
         File fl = new File(dosyaYolu);
         FileWriter fw = new FileWriter(fl, AppendMode);
         BufferedWriter bw = new BufferedWriter(fw);
         while (true) {
+            BoslukSpam();
             System.out.println("'İşlemi_Sonlandır' yazarak işlemi sonlandırabilirsin.");
             System.out.print("Yeni kelime : ");
             String yeniKelime = scn.nextLine();
@@ -215,7 +217,7 @@ public class AdamAsmaca {
     private void YeniVeriTabani() throws IOException {
         System.out.print("Oluşturulacak Veritabnının ismi ne olsun : ");
         String dosyaAdi = scn.nextLine();
-        System.out.println("Veri tabanını nereye kaydetmek istiyorsunuz (Örnek : C:/users/xxxx/desktop) : ");
+        System.out.print("Veri tabanını nereye kaydetmek istiyorsunuz (Örnek : C:/users/xxxx/desktop) : ");
         String y = scn.nextLine();
         String x = y + dosyaAdi + ".txt";
         File f = new File(x);
@@ -296,15 +298,21 @@ public class AdamAsmaca {
 
     private boolean Eminmisin() {
         Boolean sonuc = null;
-        System.out.println("Bu işlemi gerçekleştirmek istediğine eminmisin(EVET/HAYIR giriniz)");
-        String x = scn.nextLine().toUpperCase();
+
         while (true) {
+            System.out.println("Bu işlemi gerçekleştirmek istediğine eminmisin(EVET/HAYIR giriniz)");
+            String x = scn.nextLine().toUpperCase();
             if (x.equals("EVET")) {
                 sonuc = true;
+                break;
             } else if (x.equals("HAYIR")) {
                 sonuc = false;
-            }else System.out.println("Gerçekten ne yazman gerektiğini çözemedinmi ?");
+                break;
+            }
+            System.out.println("Gerçekten ne yazman gerektiğini çözemedinmi ?");
+            BoslukSpam();
         }
+        return sonuc;
     }
 
     private void BoslukSpam() {
