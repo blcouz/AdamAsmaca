@@ -124,6 +124,9 @@ public class AdamAsmaca {
                     AnaMenu();
                 }
             }
+            default -> {
+                AnaMenu();
+            }
         }
     }
 
