@@ -7,8 +7,9 @@ import java.io.IOException;
 import java.util.*;
 
 public class AdamAsmaca {
-    List<String> kelimeListesi = new ArrayList<>();
-    Scanner scn = new Scanner(System.in);
+    private List<String> kelimeListesi = new ArrayList<>();
+    private String gecerliVeriYolu;
+    private final Scanner scn = new Scanner(System.in);
     private int kalanHak = 8;
     private String kelime;
     private Character[] bulunanHarfler;
@@ -22,14 +23,31 @@ public class AdamAsmaca {
                 kelimeListesi.add(scanner.nextLine());
             }
             if (kelimeListesi.size() != 0) {
+                gecerliVeriYolu = path;
                 AnaMenu();
             } else {
-                System.out.println("Belirtilen dosya boş");
+                System.out.print("Bu veri tabanı boş yeni veri eklemek istermisin : ");
+                if (Eminmisin()) {
+                    VeriTabaninaKelimeEkle();
+                } else {
+                    System.out.println("Çıkmak için enter a bas.");
+                    System.in.read();
+                }
+            }
+
+        } else {
+            System.out.println("Bu adreste veri tabanı yok");
+            System.out.println("Yeni veri tabanı oluşturmak istermisin");
+            if (Eminmisin()) {
+                YeniVeriTabani();
+            } else {
+                System.out.println("Çıkmak için enter a bas.");
+                System.in.read();
             }
         }
     }
 
-    public void Sor() throws IOException {
+    private void Sor() throws IOException {
         BoslukSpam();
         AdamCiz(kalanHak);
         System.out.println("Kalan Hak : " + kalanHak);
@@ -136,12 +154,42 @@ public class AdamAsmaca {
         }
     }
 
-    private void VeriTabaninaKelimeEkle() {
+    private void VeriTabaninaKelimeEkle() throws IOException {
+
+        VeriTabaninaYaz(gecerliVeriYolu, true);
+        AnaMenuSorgu();
+    }
+
+    private void VeriTabaninaYaz(String dosyaYolu, Boolean AppendMode) throws IOException {
+        File fl = new File(dosyaYolu);
+        FileWriter fw = new FileWriter(fl, AppendMode);
+        BufferedWriter bw = new BufferedWriter(fw);
+        while (true) {
+            System.out.println("'İşlemi_Sonlandır' yazarak işlemi sonlandırabilirsin.");
+            System.out.print("Yeni kelime : ");
+            String yeniKelime = scn.nextLine();
+            if (yeniKelime.equals("İşlemi_Sonlandır")) {
+                bw.close();
+                break;
+            } else {
+                bw.newLine();
+                bw.write(yeniKelime);
+            }
+        }
+        Scanner kelimeCekici = new Scanner(fl);
+        kelimeListesi.clear();
+        while (kelimeCekici.hasNextLine()){
+            kelimeListesi.add(kelimeCekici.nextLine());
+        }
+        System.out.println("İşlem tamamlandı");
     }
 
     private void YeniVeriTabani() throws IOException {
-        System.out.println("Yeni Veri tabanı yolu giriniz : ");
-        String x = scn.nextLine();
+        System.out.print("Oluşturulacak Veritabnının ismi ne olsun : ");
+        String dosyaAdi = scn.nextLine();
+        System.out.println("Veri tabanını nereye kaydetmek istiyorsunuz (Örnek : C:/users/xxxx/desktop) : ");
+        String y = scn.nextLine();
+        String x = y + dosyaAdi+".txt";
         File f = new File(x);
         if (f.exists()) {
             System.out.println("Belirtilen adreste zaten bir dosya mevcut");
@@ -153,35 +201,11 @@ public class AdamAsmaca {
             String a = scn.nextLine();
             switch (a) {
                 case "1": {
-                    FileWriter fw = new FileWriter(f, false);
-                    BufferedWriter bw = new BufferedWriter(fw);
-                    while (true) {
-                        BoslukSpam();
-                        System.out.println(" Eklemek istediğiniz kelimeyi yazıp enter a basmanız yeterli.\n Ekleme işlemini sonlanırmak için İşlemi_Sonlandır yazıp enterlamanız yeterli");
-                        String yeniKelime = scn.nextLine();
-                        if (yeniKelime.equals("İşlemi_Sonlandır")) {
-                            bw.close();
-                            break;
-                        }
-                        bw.write(yeniKelime);
-                        bw.newLine();
-                    }
+                    VeriTabaninaYaz(x, false);
                     break;
                 }
                 case "2": {
-                    FileWriter fw = new FileWriter(f, true);
-                    BufferedWriter bw = new BufferedWriter(fw);
-                    while (true) {
-                        BoslukSpam();
-                        System.out.println(" Eklemek istediğiniz kelimeyi yazıp enter a basmanız yeterli.\n Ekleme işlemini sonlanırmak için İşlemi_Sonlandır yazıp enterlamanız yeterli");
-                        String yeniKelime = scn.nextLine();
-                        if (yeniKelime.equals("İşlemi_Sonlandır")) {
-                            bw.close();
-                            break;
-                        }
-                        bw.write(yeniKelime);
-                        bw.newLine();
-                    }
+                    VeriTabaninaYaz(x, true);
                     break;
                 }
                 case "3": {
@@ -193,6 +217,11 @@ public class AdamAsmaca {
                     break;
                 }
             }
+            AnaMenuSorgu();
+        } else {
+            f.createNewFile();
+            VeriTabaninaYaz(x, false);
+
             AnaMenuSorgu();
         }
     }
@@ -236,7 +265,6 @@ public class AdamAsmaca {
             System.exit(0);
         }
     }
-
 
     private boolean Eminmisin() {
         Boolean sonuc = null;
