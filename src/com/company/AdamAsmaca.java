@@ -317,7 +317,7 @@ public class AdamAsmaca {
             BoslukSpam();
             System.out.println("'İşlemi_Sonlandır' yazarak işlemi sonlandırabilirsin.");
             System.out.print("Yeni kelime : ");
-            String yeniKelime = scn.nextLine();
+            String yeniKelime = scn.next();
             if (yeniKelime.equals("İşlemi_Sonlandır")) {
                 bw.close();
                 break;
@@ -406,6 +406,7 @@ public class AdamAsmaca {
     }
 
     private void YeniKelimeCek() throws IOException {
+
         if (kelimeListesi.size() != 0) {
             Random uretici = new Random();
             int sira = uretici.nextInt(kelimeListesi.size());
@@ -413,10 +414,16 @@ public class AdamAsmaca {
             kelimeListesi.remove(sira);
             kelime = yeniKelime;
         } else {
+            BoslukSpam();
             System.out.println("Veri tabanında yeni kelime kalmadı");
-            System.out.println("Çıkış yapmak için enter a basın");
-            System.in.read();
-            System.exit(0);
+            System.out.println("Çıkış yapmak için ç yazın");
+            System.out.println("Yeni kelime eklemek için y yazın");
+            String sonuc = scn.next();
+            if(sonuc.toLowerCase().equals("y")){
+                VeriTabaninaKelimeEkle();
+            }
+            else if(sonuc.toLowerCase().equals("ç")) System.exit(0);
+            else YeniKelimeCek();
         }
     }//Kelime listesinden daha önce oynanmamış bir kelime çeker.
 
@@ -561,11 +568,11 @@ public class AdamAsmaca {
                 System.out.println("  __________________________________________");
                 System.out.println("  |                                        |");
                 System.out.println("  |                                        |");
-                System.out.println("  |      KAZANDIN                O         |");
-                System.out.println("  |   ---------------------->   /|\\        |");
-                System.out.println("  |   ---------------------->    |         |");
-                System.out.println("  |   ---------------------->   / \\        |");
-                System.out.println("  |                                        |");
+                System.out.println("  |          KAZANDIN            O    /    |");
+                System.out.println("  |   --------------------->    /|\\ /      |");
+                System.out.println("  |   --------------------->   / |         |");
+                System.out.println("  |   --------------------->    / \\        |");
+                System.out.println("  |                             |  |       |");
                 System.out.println("  |________________________________________|");
             }
         }
