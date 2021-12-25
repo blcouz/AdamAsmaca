@@ -108,7 +108,7 @@ public class AdamAsmaca {
         }
         System.out.println();
         if (kalanHak == 0) {
-            if (!hile.alwaysWin) {
+            if (!hile.herZamanKazan) {
                 System.out.println("Oyun Bitti\nKaybettiniz\nKelime : " + kelime);
                 OynananlaraYeniSatirEkle(kelime, false);
 
@@ -120,16 +120,14 @@ public class AdamAsmaca {
         System.out.print("Harf Gir : ");
         String girilenMetin = scn.next();
         Character girilenHarf = girilenMetin.toLowerCase().charAt(0);
-        if (girilenMetin.equals("win_the_game")) {
-            hile.WinTheGame();
+        if (girilenMetin.equals("oyunu_kazan")) {
+            hile.OyunuKazan();
         } else {
-            if(girilenMetin.equals("reset")){
+            if (girilenMetin.equals("reset")) {
                 hile.Reset();
-            }
-            else if(girilenMetin.equals("show_word")){
-                hile.ShowWord();
-            }
-            else if (kelime.toLowerCase().contains(girilenHarf.toString().toLowerCase())) {
+            } else if (girilenMetin.equals("kelimeyi_göster")) {
+                hile.KelimeyiGoster();
+            } else if (kelime.toLowerCase().contains(girilenHarf.toString().toLowerCase())) {
                 if (!Arrays.asList(bulunanHarfler).contains(girilenHarf)) {
                     for (int i = 0; i < kelime.length(); i++) {
                         if (kelime.toLowerCase().charAt(i) == (char) girilenHarf.toString().toLowerCase().charAt(0)) {
@@ -221,15 +219,21 @@ public class AdamAsmaca {
                     AnaMenu();
                 }
             }
-            case "go_crazy" -> {
-                hile.GoCrazy();
+            case "sapıt" -> {
+                hile.Sapit();
             }
-            case "always_win : true" ->{
-                hile.alwaysWin = true;
+            case "herzaman_kazan : açık" -> {
+                hile.herZamanKazan = true;
+                System.out.println("Her oyunu kazan : Açık");
+                System.out.println("Enter ile devam et");
+                System.in.read();
                 AnaMenu();
             }
-            case "always_win : false" ->{
-                hile.alwaysWin = false;
+            case "herzaman_kazan : kapalı" -> {
+                hile.herZamanKazan = false;
+                System.out.println("Her oyunu kazan : Kapalı");
+                System.out.println("Enter ile devam et");
+                System.in.read();
                 AnaMenu();
             }
             default -> {
@@ -568,8 +572,9 @@ public class AdamAsmaca {
     }
 
     class Hile {
-        public boolean alwaysWin= false;
-        public void GoCrazy() {
+        public boolean herZamanKazan = false;
+
+        public void Sapit() {
             while (true) {
                 Random x = new Random();
                 AdamCiz(x.nextInt(9));
@@ -582,7 +587,7 @@ public class AdamAsmaca {
             }
         }
 
-        public void WinTheGame() throws IOException {
+        public void OyunuKazan() throws IOException {
             OynananlaraYeniSatirEkle(kelime, true);
             System.out.println("Cheat activated");
             AnaMenuSorgu();
@@ -591,8 +596,9 @@ public class AdamAsmaca {
         public void Reset() {
             kalanHak = 8;
         }
-        public void ShowWord() throws IOException {
-            System.out.println(kelime);
+
+        public void KelimeyiGoster() throws IOException {
+            System.out.println("Şuan Oynanan Kelime : " +  kelime);
             System.out.println("Hadi kimse görmeden enter a bas. ");
             System.in.read();
         }
