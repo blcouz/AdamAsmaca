@@ -8,6 +8,9 @@ import java.util.*;
 
 @SuppressWarnings("ALL")
 public class AdamAsmaca {
+
+    private Hile hile = new Hile();
+    private String baslangicAdresi = System.getProperty("user.dir");
     private int kazanilanOyunSayisi = 0;
     private int kaybedilenOyunSayisi = 0;
     private List<String> oynananKelimeler = new ArrayList<>();
@@ -54,6 +57,42 @@ public class AdamAsmaca {
         }
     }
 
+    AdamAsmaca() throws IOException {
+
+        File file = new File(baslangicAdresi + "\\kelime_veri_tabani.txt");
+        String[] liste = {"araba", "zırh", "sofistik", "kelime", "pasaklı", "faktöriyel", "fişek", "pena", "kaval"};
+        gecerliVeriYolu = baslangicAdresi;
+        if (!file.exists()) {
+            System.out.println("Fonksiyona veritabanı dizini göndermediğiniz için ben sizin yerinize bir tane oluşturuyorum..");
+            System.out.println("Yeni veri tabanını şu klasörün altına kaydediyorum : " + file.getAbsolutePath() + "(\nEğer ide üzerinden çalıştırıyorsan ki eminim oradan çalıştırıyorsun proje klasörünün altında kelime_listesi (sola bak. ekranın solu) adında oluşan dosya senin veri tabanının olacak oradan ekleme silme yapabilirsin.)");//Bu yorum satırdan hatalar gelebilir ama şuan uğraşamam.
+            file.createNewFile();
+            FileWriter fw = new FileWriter(file, false);
+            BufferedWriter bw = new BufferedWriter(fw);
+            for (int i = 0; i < liste.length - 1; i++) {
+                bw.write(liste[i]);
+                bw.newLine();
+            }
+            bw.write(liste[liste.length - 1]);
+            bw.close();
+            VeriTabanındanKelimeListesiniDoldur(file.getAbsolutePath());
+            AnaMenuSorgu();
+        } else {
+            gecerliVeriYolu = file.getAbsolutePath();
+            VeriTabanındanKelimeListesiniDoldur(gecerliVeriYolu);
+        }
+    }
+
+    private void VeriTabanındanKelimeListesiniDoldur(String path) throws IOException {
+        File fl = new File(path);
+        Scanner kelimeCekici = new Scanner(fl);
+        kelimeListesi.clear();
+        while (kelimeCekici.hasNextLine()) {
+            kelimeListesi.add(kelimeCekici.nextLine());
+        }
+        kelimeCekici.close();
+        AnaMenu();
+    }
+
     private void Sor() throws IOException {
         BoslukSpam();
         AdamCiz(kalanHak);
@@ -69,36 +108,52 @@ public class AdamAsmaca {
         }
         System.out.println();
         if (kalanHak == 0) {
-            System.out.println("Oyun Bitti\nKaybettiniz\nKelime : " + kelime);
-            OynananlaraYeniSatirEkle(kelime, false);
+            if (!hile.alwaysWin) {
+                System.out.println("Oyun Bitti\nKaybettiniz\nKelime : " + kelime);
+                OynananlaraYeniSatirEkle(kelime, false);
+
+            } else {
+                OynananlaraYeniSatirEkle(kelime, true);
+            }
             AnaMenuSorgu();
         }
         System.out.print("Harf Gir : ");
-        Character girilenHarf = scn.next().toLowerCase().charAt(0);
-        if (kelime.toLowerCase().contains(girilenHarf.toString().toLowerCase())) {
-            if (!Arrays.asList(bulunanHarfler).contains(girilenHarf)) {
-                for (int i = 0; i < kelime.length(); i++) {
-                    if (kelime.toLowerCase().charAt(i) == (char) girilenHarf.toString().toLowerCase().charAt(0)) {
-                        bulunanHarfler[i] = girilenHarf;
-                        kacHarfBulundu++;
+        String girilenMetin = scn.next();
+        Character girilenHarf = girilenMetin.toLowerCase().charAt(0);
+        if (girilenMetin.equals("win_the_game")) {
+            hile.WinTheGame();
+        } else {
+            if(girilenMetin.equals("reset")){
+                hile.Reset();
+            }
+            else if(girilenMetin.equals("show_word")){
+                hile.ShowWord();
+            }
+            else if (kelime.toLowerCase().contains(girilenHarf.toString().toLowerCase())) {
+                if (!Arrays.asList(bulunanHarfler).contains(girilenHarf)) {
+                    for (int i = 0; i < kelime.length(); i++) {
+                        if (kelime.toLowerCase().charAt(i) == (char) girilenHarf.toString().toLowerCase().charAt(0)) {
+                            bulunanHarfler[i] = girilenHarf;
+                            kacHarfBulundu++;
+                        }
                     }
                 }
+                if (kacHarfBulundu == kelime.length()) {
+                    System.out.println("Oyun Bitti \n Kazandınız.");
+                    OynananlaraYeniSatirEkle(kelime, true);
+                    BoslukSpam();
+                    AdamCiz(9);
+                    System.out.println("Yeni Oyuna Başlamak için 'Y'  \nAnamenü için 'A'yazıp enterlayın.");
+                    if (scn.next().toLowerCase().equals("y")) {
+                        System.out.println("Yeni Oyun Başladı");
+                        YeniOyun();
+                    } else AnaMenu();
+                } else Sor();
+            } else {
+                kalanHak--;
             }
-            if (kacHarfBulundu == kelime.length()) {
-                System.out.println("Oyun Bitti \n Kazandınız.");
-                OynananlaraYeniSatirEkle(kelime, true);
-                BoslukSpam();
-                AdamCiz(9);
-                System.out.println("Yeni Oyuna Başlamak için 'Y'  \nAnamenü için 'A'yazıp enterlayın.");
-                if (scn.next().toLowerCase().equals("y")) {
-                    System.out.println("Yeni Oyun Başladı");
-                    YeniOyun();
-                } else AnaMenu();
-            } else Sor();
-        } else {
-            kalanHak--;
+            Sor();
         }
-        Sor();
     }//Neredeyse tüm iş buradan dönüyor
 
     private void OynananlaraYeniSatirEkle(String kelime, Boolean kazandimi) {
@@ -166,6 +221,17 @@ public class AdamAsmaca {
                     AnaMenu();
                 }
             }
+            case "go_crazy" -> {
+                hile.GoCrazy();
+            }
+            case "always_win : true" ->{
+                hile.alwaysWin = true;
+                AnaMenu();
+            }
+            case "always_win : false" ->{
+                hile.alwaysWin = false;
+                AnaMenu();
+            }
             default -> {
                 AnaMenu();
             }
@@ -177,7 +243,7 @@ public class AdamAsmaca {
         System.out.println("1-->    Kelime veritabanı yolunu güncelle ");
         System.out.println("2-->    Geçerli veritabanına yeni kelime ekle");
         System.out.println("3-->    Yeni veri tabanı oluştur");
-        System.out.println("4-->    Geçerli veritabanı dosyalarını listele");
+        System.out.println("4-->    Geçerli veritabanındaki kelimeleri listele");
         System.out.println("5-->    Ana menüye Dön");
         CizgiSpam();
         String x = scn.nextLine();
@@ -212,6 +278,10 @@ public class AdamAsmaca {
         for (int i = 0; i < kelimeListesi.size(); i++) {
             System.out.println("|             " + kelimeListesi.get(i));
         }
+        System.out.println("------------------------------");
+        System.out.println("Toplam Kelime Sayısı : " + kelimeListesi.size());
+        System.out.println("------------------------------");
+        System.out.println("Veri tabanı konumu : " + gecerliVeriYolu);
         AnaMenuSorgu();
     }
 
@@ -233,6 +303,12 @@ public class AdamAsmaca {
         File fl = new File(dosyaYolu);
         FileWriter fw = new FileWriter(fl, AppendMode);
         BufferedWriter bw = new BufferedWriter(fw);
+        List<String> veriTabanindakiKelimeler = new ArrayList<>();
+        Scanner kelimeCekici = new Scanner(fl);
+        while (kelimeCekici.hasNextLine()) {
+            veriTabanindakiKelimeler.add(kelimeCekici.nextLine());
+        }
+        kelimeCekici.close();
         while (true) {
             BoslukSpam();
             System.out.println("'İşlemi_Sonlandır' yazarak işlemi sonlandırabilirsin.");
@@ -242,20 +318,19 @@ public class AdamAsmaca {
                 bw.close();
                 break;
             } else {
-                if (AppendMode) {
-                    bw.newLine();
-                    bw.write(yeniKelime);
-                } else {
-                    bw.write(yeniKelime);
-                    bw.newLine();
+                if (!veriTabanindakiKelimeler.contains(yeniKelime.toLowerCase())) {
+                    if (AppendMode) {
+                        bw.newLine();
+                        bw.write(yeniKelime);
+                    } else {
+                        bw.write(yeniKelime);
+                        bw.newLine();
+                    }
+                    veriTabanindakiKelimeler.add(yeniKelime);
                 }
             }
         }
-        Scanner kelimeCekici = new Scanner(fl);
-        kelimeListesi.clear();
-        while (kelimeCekici.hasNextLine()) {
-            kelimeListesi.add(kelimeCekici.nextLine());
-        }
+        kelimeListesi = veriTabanindakiKelimeler;
         System.out.println("İşlem tamamlandı");
     }
 
@@ -489,6 +564,37 @@ public class AdamAsmaca {
                 System.out.println("  |                                        |");
                 System.out.println("  |________________________________________|");
             }
+        }
+    }
+
+    class Hile {
+        public boolean alwaysWin= false;
+        public void GoCrazy() {
+            while (true) {
+                Random x = new Random();
+                AdamCiz(x.nextInt(9));
+                for (int i = 0; i < x.nextInt(5); i++) {
+                    BoslukSpam();
+                }
+                for (int i = 0; i < x.nextInt(5); i++) {
+                    CizgiSpam();
+                }
+            }
+        }
+
+        public void WinTheGame() throws IOException {
+            OynananlaraYeniSatirEkle(kelime, true);
+            System.out.println("Cheat activated");
+            AnaMenuSorgu();
+        }
+
+        public void Reset() {
+            kalanHak = 8;
+        }
+        public void ShowWord() throws IOException {
+            System.out.println(kelime);
+            System.out.println("Hadi kimse görmeden enter a bas. ");
+            System.in.read();
         }
     }
 }
