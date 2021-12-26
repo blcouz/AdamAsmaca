@@ -501,7 +501,7 @@ public class AdamAsmaca {
         out.println("                                                                                                                                                                                   ");
         out.println("                                                                                                                                                                                   ");
         out.println("                                                                                                                                                                                   ");
-    }//Üşenmesem bunu fonksiyonel hale getirebilirdim.
+    }//Üşenmesem bunu fonksiyonel hale getirebilirdim. İsteyen deneyebilir
 
     private void AnaMenuSorgu() throws IOException {
         out.println();
