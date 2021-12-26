@@ -6,17 +6,17 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
 
-@SuppressWarnings("ALL")
+import static java.lang.System.*;//bu satır sayesinde direkt out.println yazabiliyoruz.
+
 public class AdamAsmaca {
 
-    private Hile hile = new Hile();
-    private String baslangicAdresi = System.getProperty("user.dir");
+    private final Hile hile = new Hile();
     private int kazanilanOyunSayisi = 0;
     private int kaybedilenOyunSayisi = 0;
-    private List<String> oynananKelimeler = new ArrayList<>();
+    private final List<String> oynananKelimeler = new ArrayList<>();
     private List<String> kelimeListesi = new ArrayList<>();
     private String gecerliVeriYolu;
-    private final Scanner scn = new Scanner(System.in);
+    private final Scanner scn = new Scanner(in);
     private int kalanHak = 8;
     private String kelime;
     private Character[] bulunanHarfler;
@@ -36,35 +36,36 @@ public class AdamAsmaca {
                 gecerliVeriYolu = path;
                 AnaMenu();
             } else {
-                System.out.print("Bu veri tabanı boş yeni veri eklemek istermisin : ");
+                out.print("Bu veri tabanı boş yeni veri eklemek istermisin : ");
                 if (Eminmisin()) {
                     VeriTabaninaKelimeEkle();
                 } else {
-                    System.out.println("Çıkmak için enter a bas.");
-                    System.in.read();
+                    out.println("Çıkmak için enter a bas.");
+                    in.read();
                 }
             }
 
         } else {
-            System.out.println("Bu adreste veri tabanı yok");
-            System.out.println("Yeni veri tabanı oluşturmak istermisin");
+            out.println("Bu adreste veri tabanı yok");
+            out.println("Yeni veri tabanı oluşturmak istermisin");
             if (Eminmisin()) {
                 YeniVeriTabani();
             } else {
-                System.out.println("Çıkmak için enter a bas.");
-                System.in.read();
+                out.println("Çıkmak için enter a bas.");
+                in.read();
             }
         }
     }
 
     AdamAsmaca() throws IOException {
 
+        String baslangicAdresi = getProperty("user.dir");
         File file = new File(baslangicAdresi + "\\kelime_veri_tabani.txt");
         String[] liste = {"araba", "zırh", "sofistik", "kelime", "pasaklı", "faktöriyel", "fişek", "pena", "kaval"};
         gecerliVeriYolu = baslangicAdresi;
         if (!file.exists()) {
-            System.out.println("Fonksiyona veritabanı dizini göndermediğiniz için ben sizin yerinize bir tane oluşturuyorum..");
-            System.out.println("Yeni veri tabanını şu klasörün altına kaydediyorum : " + file.getAbsolutePath() + "(\nEğer ide üzerinden çalıştırıyorsan ki eminim oradan çalıştırıyorsun proje klasörünün altında kelime_listesi (sola bak. ekranın solu) adında oluşan dosya senin veri tabanının olacak oradan ekleme silme yapabilirsin.)");//Bu yorum satırdan hatalar gelebilir ama şuan uğraşamam.
+            out.println("Fonksiyona veritabanı dizini göndermediğiniz için ben sizin yerinize bir tane oluşturuyorum..");
+            out.println("Yeni veri tabanını şu klasörün altına kaydediyorum : " + file.getAbsolutePath() + "(\nEğer ide üzerinden çalıştırıyorsan ki eminim oradan çalıştırıyorsun proje klasörünün altında kelime_listesi (sola bak. ekranın solu) adında oluşan dosya senin veri tabanının olacak oradan ekleme silme yapabilirsin.)");//Bu yorum satırdan hatalar gelebilir ama şuan uğraşamam.
             file.createNewFile();
             FileWriter fw = new FileWriter(file, false);
             BufferedWriter bw = new BufferedWriter(fw);
@@ -74,15 +75,15 @@ public class AdamAsmaca {
             }
             bw.write(liste[liste.length - 1]);
             bw.close();
-            VeriTabanındanKelimeListesiniDoldur(file.getAbsolutePath());
+            VeriTabanindanKelimeListesiniDoldur(file.getAbsolutePath());
             AnaMenuSorgu();
         } else {
             gecerliVeriYolu = file.getAbsolutePath();
-            VeriTabanındanKelimeListesiniDoldur(gecerliVeriYolu);
+            VeriTabanindanKelimeListesiniDoldur(gecerliVeriYolu);
         }
     }
 
-    private void VeriTabanındanKelimeListesiniDoldur(String path) throws IOException {
+    private void VeriTabanindanKelimeListesiniDoldur(String path) throws IOException {
         File fl = new File(path);
         Scanner kelimeCekici = new Scanner(fl);
         kelimeListesi.clear();
@@ -96,30 +97,38 @@ public class AdamAsmaca {
     private void Sor() throws IOException {
         BoslukSpam();
         AdamCiz(kalanHak);
-        System.out.println("Kalan Hak : " + kalanHak);
-        for (int i = 0; i < bulunanHarfler.length; i++) {
-            if (bulunanHarfler[i] != null) {
-                System.out.print(bulunanHarfler[i]);
-            } else System.out.print(" ");
+        out.println("                                                                               Kalan Hak : " + kalanHak);
+        out.print("                                                                    ");
+        for (Character character : bulunanHarfler) {
+
+            if (character != null) {
+                out.print(character);
+            } else out.print(" ");
         }
-        System.out.println();
+        out.println();
+        out.print("                                                                    ");
         for (int i = 0; i < kelime.length(); i++) {
-            System.out.print("-");
+            out.print("-");
         }
-        System.out.println();
+        out.println();
         if (kalanHak == 0) {
             if (!hile.herZamanKazan) {
-                System.out.println("Oyun Bitti\nKaybettiniz\nKelime : " + kelime);
+                out.println("Oyun Bitti\nKaybettiniz\nKelime : " + kelime);
                 OynananlaraYeniSatirEkle(kelime, false);
+                out.println("                                                                               Yeni Oyuna Başlamak için 'Y'  \n                                                                               Anamenü için 'A'yazıp enterlayın.");
+                if (scn.next().equalsIgnoreCase("y")) {
+                    out.println("                                                                               Yeni Oyun Başladı");
+                    YeniOyun();
+                } else AnaMenu();
 
             } else {
                 OynananlaraYeniSatirEkle(kelime, true);
             }
             AnaMenuSorgu();
         }
-        System.out.print("Harf Gir : ");
+        out.print("                                                                               Harf Gir : ");
         String girilenMetin = scn.next();
-        Character girilenHarf = girilenMetin.toLowerCase().charAt(0);
+        char girilenHarf = girilenMetin.toLowerCase().charAt(0);
         if (girilenMetin.equals("oyunu_kazan")) {
             hile.OyunuKazan();
         } else {
@@ -127,28 +136,30 @@ public class AdamAsmaca {
                 hile.Reset();
             } else if (girilenMetin.equals("kelimeyi_göster")) {
                 hile.KelimeyiGoster();
-            } else if (kelime.toLowerCase().contains(girilenHarf.toString().toLowerCase())) {
-                if (!Arrays.asList(bulunanHarfler).contains(girilenHarf)) {
-                    for (int i = 0; i < kelime.length(); i++) {
-                        if (kelime.toLowerCase().charAt(i) == (char) girilenHarf.toString().toLowerCase().charAt(0)) {
-                            bulunanHarfler[i] = girilenHarf;
-                            kacHarfBulundu++;
+            }
+            else if(girilenMetin.length() == 1) {
+                if (kelime.toLowerCase().contains(Character.toString(girilenHarf).toLowerCase())) {
+                    if (!Arrays.asList(bulunanHarfler).contains(girilenHarf)) {
+                        for (int i = 0; i < kelime.length(); i++) {
+                            if (kelime.toLowerCase().charAt(i) == Character.toString(girilenHarf).toLowerCase().charAt(0)) {
+                                bulunanHarfler[i] = girilenHarf;
+                                kacHarfBulundu++;
+                            }
                         }
                     }
+                    if (kacHarfBulundu == kelime.length()) {
+                        out.println("                                                                               Oyun Bitti \n                                                                                Kazandınız.");
+                        OynananlaraYeniSatirEkle(kelime, true);
+                        AdamCiz(9);
+                        out.println("                                                                               Yeni Oyuna Başlamak için 'Y'  \n                                                                               Anamenü için 'A'yazıp enterlayın.");
+                        if (scn.next().equalsIgnoreCase("y")) {
+                            out.println("                                                                               Yeni Oyun Başladı");
+                            YeniOyun();
+                        } else AnaMenu();
+                    } else Sor();
+                } else {
+                    kalanHak--;
                 }
-                if (kacHarfBulundu == kelime.length()) {
-                    System.out.println("Oyun Bitti \n Kazandınız.");
-                    OynananlaraYeniSatirEkle(kelime, true);
-                    BoslukSpam();
-                    AdamCiz(9);
-                    System.out.println("Yeni Oyuna Başlamak için 'Y'  \nAnamenü için 'A'yazıp enterlayın.");
-                    if (scn.next().toLowerCase().equals("y")) {
-                        System.out.println("Yeni Oyun Başladı");
-                        YeniOyun();
-                    } else AnaMenu();
-                } else Sor();
-            } else {
-                kalanHak--;
             }
             Sor();
         }
@@ -169,15 +180,15 @@ public class AdamAsmaca {
     private void OynananKelimeleriListele() throws IOException {
         BoslukSpam();
         if (oynananKelimeler.size() != 0) {
-            System.out.println("----------Kelimeler---------");
-            for (int i = 0; i < oynananKelimeler.size(); i++) {
-                System.out.println("     " + oynananKelimeler.get(i));
+            out.println("----------Kelimeler---------");
+            for (String s : oynananKelimeler) {
+                out.println("     " + s);
             }
-            System.out.println("----------------------------");
-            System.out.println("Kazanılan Oyun Sayısı : " + kazanilanOyunSayisi);
-            System.out.println("Kaybedilen Oyun Sayısı : " + kaybedilenOyunSayisi);
+            out.println("----------------------------");
+            out.println("Kazanılan Oyun Sayısı : " + kazanilanOyunSayisi);
+            out.println("Kaybedilen Oyun Sayısı : " + kaybedilenOyunSayisi);
         } else {
-            System.out.println("Daha önce oyun oynamadın neyin peşindesin");
+            out.println("Daha önce oyun oynamadın neyin peşindesin");
             AnaMenuSorgu();
         }
         AnaMenuSorgu();
@@ -193,107 +204,84 @@ public class AdamAsmaca {
 
     private void AnaMenu() throws IOException {
         BoslukSpam();
-        System.out.println("<-------------ANA MENÜ----------->");
-        System.out.println("Yeni Oyun                  ----> 1");
-        System.out.println("Veritabanı Ayarları        ----> 2");
-        System.out.println("Oynanan Kelimeleri Listele ----> 3");
-        System.out.println("Çıkış                      ----> 4");
+        out.println("                                                                        <-------------ANA MENÜ----------->");
+        out.println("                                                                        Yeni Oyun                  ----> 1");
+        out.println("                                                                        Veritabanı Ayarları        ----> 2");
+        out.println("                                                                        Oynanan Kelimeleri Listele ----> 3");
+        out.println("                                                                        Çıkış                      ----> 4");
         CizgiSpam();
         String x = scn.nextLine();
         switch (x) {
-            case "1" -> {
-                YeniOyun();
-            }
-            case "2" -> {
-                ListeAyarlari();
-            }
-            case "3" -> {
-                OynananKelimeleriListele();
-            }
+            case "1" -> YeniOyun();
+            case "2" -> ListeAyarlari();
+            case "3" -> OynananKelimeleriListele();
             case "4" -> {
-                System.out.println("Oyundan çıkmak için 'C' yazın c harici (Ana menü için enter a bas)");
+                out.println("                                                                        Oyundan çıkmak için 'C' yazın  (Ana menü için enter a bas)");
                 String sonuc = scn.nextLine();
-                if (sonuc.toLowerCase().equals("c")) {
-                    System.exit(0);
-                } else {
+                if (sonuc.equalsIgnoreCase("c")) exit(0);
+                else {
                     AnaMenu();
                 }
             }
-            case "sapıt" -> {
-                hile.Sapit();
-            }
+            case "sapıt" -> hile.Sapit();
             case "herzaman_kazan : açık" -> {
                 hile.herZamanKazan = true;
-                System.out.println("Her oyunu kazan : Açık");
-                System.out.println("Enter ile devam et");
-                System.in.read();
+                out.println("Her oyunu kazan : Açık");
+                out.println("Enter ile devam et");
+                in.read();
                 AnaMenu();
             }
             case "herzaman_kazan : kapalı" -> {
                 hile.herZamanKazan = false;
-                System.out.println("Her oyunu kazan : Kapalı");
-                System.out.println("Enter ile devam et");
-                System.in.read();
+                out.println("Her oyunu kazan : Kapalı");
+                out.println("Enter ile devam et");
+                in.read();
                 AnaMenu();
             }
-            default -> {
-                AnaMenu();
-            }
+            default -> AnaMenu();
         }
     }
 
     private void ListeAyarlari() throws IOException {
         BoslukSpam();
-        System.out.println("1-->    Kelime veritabanı yolunu güncelle ");
-        System.out.println("2-->    Geçerli veritabanına yeni kelime ekle");
-        System.out.println("3-->    Yeni veri tabanı oluştur");
-        System.out.println("4-->    Geçerli veritabanındaki kelimeleri listele");
-        System.out.println("5-->    Ana menüye Dön");
+        out.println("1-->    Kelime veritabanı yolunu güncelle ");
+        out.println("2-->    Geçerli veritabanına yeni kelime ekle");
+        out.println("3-->    Yeni veri tabanı oluştur");
+        out.println("4-->    Geçerli veritabanındaki kelimeleri listele");
+        out.println("5-->    Ana menüye Dön");
         CizgiSpam();
         String x = scn.nextLine();
         switch (x) {
-            case "1" -> {
-                VeriYoluGuncelle();
-            }
-            case "2" -> {
-                VeriTabaninaKelimeEkle();
-            }
-            case "3" -> {
-                YeniVeriTabani();
-            }
-            case "4" -> {
-                KelimeleriListele();
-            }
-            case "5" -> {
-                AnaMenu();
-            }
+            case "1" -> VeriYoluGuncelle();
+            case "2" -> VeriTabaninaKelimeEkle();
+            case "3" -> YeniVeriTabani();
+            case "4" -> KelimeleriListele();
+            case "5" -> AnaMenu();
 
-            default -> {
-                ListeAyarlari();
-            }
+            default -> ListeAyarlari();
         }
     }
 
     private void KelimeleriListele() throws IOException {
         BoslukSpam();
         File file = new File(gecerliVeriYolu);
-        Scanner scanner = new Scanner(file);
-        System.out.println("-----------KELİMELER----------");
-        for (int i = 0; i < kelimeListesi.size(); i++) {
-            System.out.println("|             " + kelimeListesi.get(i));
+        var scanner = new Scanner(file);
+        out.println("-----------KELİMELER----------");
+        for (String s : kelimeListesi) {
+            out.println("|             " + s);
         }
-        System.out.println("------------------------------");
-        System.out.println("Toplam Kelime Sayısı : " + kelimeListesi.size());
-        System.out.println("------------------------------");
-        System.out.println("Veri tabanı konumu : " + gecerliVeriYolu);
+        out.println("------------------------------");
+        out.println("Toplam Kelime Sayısı : " + kelimeListesi.size());
+        out.println("------------------------------");
+        out.println("Veri tabanı konumu : " + gecerliVeriYolu);
         AnaMenuSorgu();
     }
 
     private void CizgiSpam() {
-        for (int i = 0; i < 5; i++) {
-            System.out.println("|");
-        }
-        System.out.print("---------------> ");
+        out.println("                                                                                     |     ");
+        out.println("                                                                                     |     ");
+        out.println("                                                                                     |     ");
+        out.print("                                                                                     |-->");
     }
 
     private void VeriTabaninaKelimeEkle() throws IOException {
@@ -315,8 +303,8 @@ public class AdamAsmaca {
         kelimeCekici.close();
         while (true) {
             BoslukSpam();
-            System.out.println("'İşlemi_Sonlandır' yazarak işlemi sonlandırabilirsin.");
-            System.out.print("Yeni kelime : ");
+            out.println("'İşlemi_Sonlandır' yazarak işlemi sonlandırabilirsin.");
+            out.print("Yeni kelime : ");
             String yeniKelime = scn.next();
             if (yeniKelime.equals("İşlemi_Sonlandır")) {
                 bw.close();
@@ -335,38 +323,38 @@ public class AdamAsmaca {
             }
         }
         kelimeListesi = veriTabanindakiKelimeler;
-        System.out.println("İşlem tamamlandı");
+        out.println("İşlem tamamlandı");
     }
 
     private void YeniVeriTabani() throws IOException {
-        System.out.print("Oluşturulacak Veritabnının ismi ne olsun : ");
+        out.print("Oluşturulacak Veritabnının ismi ne olsun : ");
         String dosyaAdi = scn.nextLine();
-        System.out.print("Veri tabanını nereye kaydetmek istiyorsunuz (Örnek : C:/users/xxxx/desktop) : ");
+        out.print("Veri tabanını nereye kaydetmek istiyorsunuz (Örnek : C:/users/xxxx/desktop) : ");
         String y = scn.nextLine();
         String x = y + dosyaAdi + ".txt";
         File f = new File(x);
         if (f.exists()) {
-            System.out.println("Belirtilen adreste zaten bir dosya mevcut");
-            System.out.println("1-->Dosyanın içeriğini silip yeniden doldur");
-            System.out.println("2-->Dosyanın içeriğinin üzerine veri ekle");
-            System.out.println("3-->Yeni Dosya yolu gir");
-            System.out.println("4-->İptal et ve anamenüye dön");
-            System.out.println("----------->");
+            out.println("Belirtilen adreste zaten bir dosya mevcut");
+            out.println("1-->Dosyanın içeriğini silip yeniden doldur");
+            out.println("2-->Dosyanın içeriğinin üzerine veri ekle");
+            out.println("3-->Yeni Dosya yolu gir");
+            out.println("4-->İptal et ve anamenüye dön");
+            out.println("----------->");
             String a = scn.nextLine();
             switch (a) {
-                case "1": {
+                case "1" -> {
                     VeriTabaninaYaz(x, false);
                     break;
                 }
-                case "2": {
+                case "2" -> {
                     VeriTabaninaYaz(x, true);
                     break;
                 }
-                case "3": {
+                case "3" -> {
                     YeniVeriTabani();
                     break;
                 }
-                case "4": {
+                case "4" -> {
                     AnaMenuSorgu();
                     break;
                 }
@@ -381,11 +369,11 @@ public class AdamAsmaca {
     }
 
     private void VeriYoluGuncelle() throws IOException {
-        System.out.print("Yeni veritabanı yolunu giriniz : ");
+        out.print("Yeni veritabanı yolunu giriniz : ");
         String yeniVeriYolu = scn.nextLine();
         File yeniVeriTabani = new File(yeniVeriYolu);
         if (!yeniVeriTabani.exists()) {
-            System.out.println("Belirtilen konumda böyle bir dosya yok");
+            out.println("Belirtilen konumda böyle bir dosya yok");
         } else {
             List<String> yeniKelimeListesi = new ArrayList<>();
             Scanner kelimeCekici = new Scanner(yeniVeriTabani);
@@ -393,9 +381,9 @@ public class AdamAsmaca {
                 yeniKelimeListesi.add(kelimeCekici.nextLine());
             }
             if (kelimeListesi.size() == 0) {
-                System.out.println("Geçerli veritabanı dosyası içerisinde herhangi bir kelime yok");
+                out.println("Geçerli veritabanı dosyası içerisinde herhangi bir kelime yok");
             } else {
-                System.out.println("Veritabanı bulundu.\nKelime Adedi : " + yeniKelimeListesi.size());
+                out.println("Veritabanı bulundu.\nKelime Adedi : " + yeniKelimeListesi.size());
                 if (Eminmisin()) {
                     kelimeListesi = yeniKelimeListesi;
                 } else {
@@ -415,14 +403,13 @@ public class AdamAsmaca {
             kelime = yeniKelime;
         } else {
             BoslukSpam();
-            System.out.println("Veri tabanında yeni kelime kalmadı");
-            System.out.println("Çıkış yapmak için ç yazın");
-            System.out.println("Yeni kelime eklemek için y yazın");
+            out.println("Veri tabanında yeni kelime kalmadı");
+            out.println("Çıkış yapmak için ç yazın");
+            out.println("Yeni kelime eklemek için y yazın");
             String sonuc = scn.next();
-            if(sonuc.toLowerCase().equals("y")){
+            if (sonuc.equalsIgnoreCase("y")) {
                 VeriTabaninaKelimeEkle();
-            }
-            else if(sonuc.toLowerCase().equals("ç")) System.exit(0);
+            } else if (sonuc.equalsIgnoreCase("ç")) exit(0);
             else YeniKelimeCek();
         }
     }//Kelime listesinden daha önce oynanmamış bir kelime çeker.
@@ -431,7 +418,7 @@ public class AdamAsmaca {
         Boolean sonuc = null;
 
         while (true) {
-            System.out.println("Bu işlemi gerçekleştirmek istediğine eminmisin(EVET/HAYIR giriniz)");
+            out.println("Bu işlemi gerçekleştirmek istediğine eminmisin(EVET/HAYIR giriniz)");
             String x = scn.nextLine().toUpperCase();
             if (x.equals("EVET")) {
                 sonuc = true;
@@ -440,140 +427,204 @@ public class AdamAsmaca {
                 sonuc = false;
                 break;
             }
-            System.out.println("Gerçekten ne yazman gerektiğini çözemedinmi ?");
+            out.println("Gerçekten ne yazman gerektiğini çözemedinmi ?");
             BoslukSpam();
         }
         return sonuc;
     }
 
     private void BoslukSpam() {
-        for (int i = 0; i < 50; i++) {
-            System.out.println();
-        }
-    }
+        out.println("                                                                                |                 |                                                                                ");
+        out.println("                                                                                |                 |                                                                                ");
+        out.println("                                                                                |                 |                                                                                ");
+        out.println("                                                                                |                 |                                                                                ");
+        out.println("                                                                                |                 |                                                                                ");
+        out.println("                                                                                |                 |                                                                                ");
+        out.println("                                                                                |                 |                                                                                ");
+        out.println("                                                                                |                 |                                                                                ");
+        out.println("                                                                                |                 |                                                                                ");
+        out.println("                                                                                |                 |                                                                                ");
+        out.println("                                                                                |                 |                                                                                ");
+        out.println("                                                                                |                 |                                                                                ");
+        out.println("                                                                                |                 |-------------------------------------------------------------------------------|");
+        out.println("                                                                                |                                                                                                 |");
+        out.println("                                                                                |                                                                                                 |");
+        out.println("                                                                                |                                                                                                 |");
+        out.println("                                                                                |                                                                                                 |");
+        out.println("                                                                                |--------------------------------------------------------------------------------|                |");
+        out.println("                                                                                                                                                                 |                |");
+        out.println("                                                                                                                                                                 |                |");
+        out.println("                                                                                                                                                                 |                |");
+        out.println("                                                                                                                                                                 |                |");
+        out.println("                                                                                                                                                                 |                |");
+        out.println("                                                                                                                                                                 |                |");
+        out.println("                                                                                                                                                                 |                |");
+        out.println("                                                                                                                                                                 |                |");
+        out.println("                                                                                                                                                                 |                |");
+        out.println("                                                                                                                                                                 |                |");
+        out.println("|----------------------------------------------------------------------------------------------------------------------------------------------------------------|                |");
+        out.println("|                                                                                                                                                                                 |");
+        out.println("|                                                                                                                                                                                 |");
+        out.println("|                                                                                                                                                                                 |");
+        out.println("|                                                                                                                                                                                 |");
+        out.println("|               |-----------------------------------------------------------------------------------------------------------------------------------------------------------------|");
+        out.println("|               |                                                                                                                                                                  ");
+        out.println("|               |                                                                                                                                                                  ");
+        out.println("|               |                                                                                                                                                                  ");
+        out.println("|               |                                                                                                                                                                  ");
+        out.println("|               |                                                                                                                                                                  ");
+        out.println("|               |                                                                                                                                                                  ");
+        out.println("|               |                                                                                                                                                                  ");
+        out.println("|               |                                                                                                                                                                  ");
+        out.println("|               |                                                                                                                                                                  ");
+        out.println("|               |----------------------------------------------------------------------------------                                                                                ");
+        out.println("|                                                                                                 |                                                                                ");
+        out.println("|                                                                                                 |                                                                                ");
+        out.println("|                                                                                                 |                                                                                ");
+        out.println("|                                                                                                 |                                                                                ");
+        out.println("|---------------------------------------------------------------------------------                |                                                                                ");
+        out.println("                                                                                |                 |                                                                                ");
+        out.println("                                                                                |                 |                                                                                ");
+        out.println("                                                                                |                 |                                                                                ");
+        out.println("                                                                                |                 |                                                                                ");
+        out.println("                                                                                 \\                /                                                                               ");
+        out.println("                                                                                  \\              /                                                                                ");
+        out.println("                                                                                   \\            /                                                                                 ");
+        out.println("                                                                                    \\          /                                                                                  ");
+        out.println("                                                                                     \\        /                                                                                   ");
+        out.println("                                                                                      \\      /                                                                                    ");
+        out.println("                                                                                       \\    /                                                                                     ");
+        out.println("                                                                                        \\  /                                                                                      ");
+        out.println("                                                                                         \\/                                                                                       ");
+        out.println("                                                                                                                                                                                   ");
+        out.println("                                                                                                                                                                                   ");
+        out.println("                                                                                                                                                                                   ");
+        out.println("                                                                                                                                                                                   ");
+        out.println("                                                                                                                                                                                   ");
+    }//Üşenmesem bunu fonksiyonel hale getirebilirdim.
 
     private void AnaMenuSorgu() throws IOException {
-        System.out.println();
-        System.out.println();
-        System.out.println("Ana menüye dönmek için enter a basın");
-        System.in.read();
+        out.println();
+        out.println();
+        out.println("Ana menüye dönmek için enter a basın");
+        in.read();
         AnaMenu();
     }
 
     private void AdamCiz(int i) {
         switch (i) {
             case 0 -> {
-                System.out.println("  __________________________________________");
-                System.out.println("  |               _______                  |");
-                System.out.println("  |               |     |                  |");
-                System.out.println("  |              \\0/    |                  |");
-                System.out.println("  |               |     |                  |");
-                System.out.println("  |              / \\    |                  |");
-                System.out.println("  |                     |                  |");
-                System.out.println("  |              --------                  |");
-                System.out.println("  |________________________________________|");
+                out.println("                                                                __________________________________________");
+                out.println("                                                                |               _______                  |");
+                out.println("                                                                |               |     |                  |");
+                out.println("                                                                |              \\0/    |                  |");
+                out.println("                                                                |               |     |                  |");
+                out.println("                                                                |              / \\    |                  |");
+                out.println("                                                                |                     |                  |");
+                out.println("                                                                |              --------                  |");
+                out.println("                                                                |________________________________________|");
             }
             case 1 -> {
 
-                System.out.println("  __________________________________________");
-                System.out.println("  |               _______                  |");
-                System.out.println("  |                     |                  |");
-                System.out.println("  |              \\0/    |                  |");
-                System.out.println("  |               |     |                  |");
-                System.out.println("  |              / \\    |                  |");
-                System.out.println("  |                     |                  |");
-                System.out.println("  |              --------                  |");
-                System.out.println("  |________________________________________|");
+                out.println("                                                                __________________________________________");
+                out.println("                                                                |               _______                  |");
+                out.println("                                                                |                     |                  |");
+                out.println("                                                                |              \\0/    |                  |");
+                out.println("                                                                |               |     |                  |");
+                out.println("                                                                |              / \\    |                  |");
+                out.println("                                                                |                     |                  |");
+                out.println("                                                                |              --------                  |");
+                out.println("                                                                |________________________________________|");
             }
             case 2 -> {
 
-                System.out.println("  __________________________________________");
-                System.out.println("  |               _______                  |");
-                System.out.println("  |                     |                  |");
-                System.out.println("  |              \\0/    |                  |");
-                System.out.println("  |               |     |                  |");
-                System.out.println("  |                     |                  |");
-                System.out.println("  |                     |                  |");
-                System.out.println("  |              --------                  |");
-                System.out.println("  |________________________________________|");
+                out.println("                                                                __________________________________________");
+                out.println("                                                                |               _______                  |");
+                out.println("                                                                |                     |                  |");
+                out.println("                                                                |              \\0/    |                  |");
+                out.println("                                                                |               |     |                  |");
+                out.println("                                                                |                     |                  |");
+                out.println("                                                                |                     |                  |");
+                out.println("                                                                |              --------                  |");
+                out.println("                                                                |________________________________________|");
             }
             case 3 -> {
-                System.out.println("  __________________________________________");
-                System.out.println("  |               _______                  |");
-                System.out.println("  |                     |                  |");
-                System.out.println("  |              \\0/    |                  |");
-                System.out.println("  |                     |                  |");
-                System.out.println("  |                     |                  |");
-                System.out.println("  |                     |                  |");
-                System.out.println("  |              --------                  |");
-                System.out.println("  |________________________________________|");
+                out.println("                                                                __________________________________________");
+                out.println("                                                                |               _______                  |");
+                out.println("                                                                |                     |                  |");
+                out.println("                                                                |              \\0/    |                  |");
+                out.println("                                                                |                     |                  |");
+                out.println("                                                                |                     |                  |");
+                out.println("                                                                |                     |                  |");
+                out.println("                                                                |              --------                  |");
+                out.println("                                                                |________________________________________|");
             }
             case 4 -> {
-                System.out.println("  __________________________________________");
-                System.out.println("  |               _______                  |");
-                System.out.println("  |                     |                  |");
-                System.out.println("  |               0     |                  |");
-                System.out.println("  |                     |                  |");
-                System.out.println("  |                     |                  |");
-                System.out.println("  |                     |                  |");
-                System.out.println("  |              --------                  |");
-                System.out.println("  |________________________________________|");
+                out.println("                                                                __________________________________________");
+                out.println("                                                                |               _______                  |");
+                out.println("                                                                |                     |                  |");
+                out.println("                                                                |               0     |                  |");
+                out.println("                                                                |                     |                  |");
+                out.println("                                                                |                     |                  |");
+                out.println("                                                                |                     |                  |");
+                out.println("                                                                |              --------                  |");
+                out.println("                                                                |________________________________________|");
             }
             case 5 -> {
-                System.out.println("  __________________________________________");
-                System.out.println("  |               _______                  |");
-                System.out.println("  |                     |                  |");
-                System.out.println("  |                     |                  |");
-                System.out.println("  |                     |                  |");
-                System.out.println("  |                     |                  |");
-                System.out.println("  |                     |                  |");
-                System.out.println("  |              --------                  |");
-                System.out.println("  |________________________________________|");
+                out.println("                                                                __________________________________________");
+                out.println("                                                                |               _______                  |");
+                out.println("                                                                |                     |                  |");
+                out.println("                                                                |                     |                  |");
+                out.println("                                                                |                     |                  |");
+                out.println("                                                                |                     |                  |");
+                out.println("                                                                |                     |                  |");
+                out.println("                                                                |              --------                  |");
+                out.println("                                                                |________________________________________|");
             }
             case 6 -> {
 
-                System.out.println("  __________________________________________");
-                System.out.println("  |                                        |");
-                System.out.println("  |                     |                  |");
-                System.out.println("  |                     |                  |");
-                System.out.println("  |                     |                  |");
-                System.out.println("  |                     |                  |");
-                System.out.println("  |                     |                  |");
-                System.out.println("  |              --------                  |");
-                System.out.println("  |________________________________________|");
+                out.println("                                                                __________________________________________");
+                out.println("                                                                |                                        |");
+                out.println("                                                                |                     |                  |");
+                out.println("                                                                |                     |                  |");
+                out.println("                                                                |                     |                  |");
+                out.println("                                                                |                     |                  |");
+                out.println("                                                                |                     |                  |");
+                out.println("                                                                |              --------                  |");
+                out.println("                                                                |________________________________________|");
             }
             case 7 -> {
-                System.out.println("  __________________________________________");
-                System.out.println("  |                                        |");
-                System.out.println("  |                                        |");
-                System.out.println("  |                                        |");
-                System.out.println("  |                                        |");
-                System.out.println("  |                                        |");
-                System.out.println("  |                                        |");
-                System.out.println("  |              --------                  |");
-                System.out.println("  |________________________________________|");
+                out.println("                                                                __________________________________________");
+                out.println("                                                                |                                        |");
+                out.println("                                                                |                                        |");
+                out.println("                                                                |                                        |");
+                out.println("                                                                |                                        |");
+                out.println("                                                                |                                        |");
+                out.println("                                                                |                                        |");
+                out.println("                                                                |              --------                  |");
+                out.println("                                                                |________________________________________|");
             }
             case 8 -> {
-                System.out.println("  __________________________________________");
-                System.out.println("  |                                        |");
-                System.out.println("  |                                        |");
-                System.out.println("  |                                        |");
-                System.out.println("  |                                        |");
-                System.out.println("  |                                        |");
-                System.out.println("  |                                        |");
-                System.out.println("  |                                        |");
-                System.out.println("  |________________________________________|");
+                out.println("                                                                __________________________________________");
+                out.println("                                                                |                                        |");
+                out.println("                                                                |                                        |");
+                out.println("                                                                |                                        |");
+                out.println("                                                                |                                        |");
+                out.println("                                                                |                                        |");
+                out.println("                                                                |                                        |");
+                out.println("                                                                |                                        |");
+                out.println("                                                                |________________________________________|");
             }
             case 9 -> {
-                System.out.println("  __________________________________________");
-                System.out.println("  |                                        |");
-                System.out.println("  |                                        |");
-                System.out.println("  |          KAZANDIN            O    /    |");
-                System.out.println("  |   --------------------->    /|\\ /      |");
-                System.out.println("  |   --------------------->   / |         |");
-                System.out.println("  |   --------------------->    / \\        |");
-                System.out.println("  |                             |  |       |");
-                System.out.println("  |________________________________________|");
+                out.println("                                                                __________________________________________");
+                out.println("                                                                |                                        |");
+                out.println("                                                                |                                        |");
+                out.println("                                                                |          KAZANDIN            O    /    |");
+                out.println("                                                                |   --------------------->    /|\\ /      |");
+                out.println("                                                                |   --------------------->   / |         |");
+                out.println("                                                                |   --------------------->    / \\        |");
+                out.println("                                                                |                             |  |       |");
+                out.println("                                                                |________________________________________|");
             }
         }
     }
@@ -596,7 +647,7 @@ public class AdamAsmaca {
 
         public void OyunuKazan() throws IOException {
             OynananlaraYeniSatirEkle(kelime, true);
-            System.out.println("Cheat activated");
+            out.println("Cheat activated");
             AnaMenuSorgu();
         }
 
@@ -605,9 +656,12 @@ public class AdamAsmaca {
         }
 
         public void KelimeyiGoster() throws IOException {
-            System.out.println("Şuan Oynanan Kelime : " +  kelime);
-            System.out.println("Hadi kimse görmeden enter a bas. ");
-            System.in.read();
+            out.println();
+            out.println();
+            out.println();
+            out.println("                                                                           Şuan Oynanan Kelime : " + kelime);
+            out.println("                                                                           Hadi kimse görmeden enter a bas. ");
+            in.read();
         }
     }
 }
