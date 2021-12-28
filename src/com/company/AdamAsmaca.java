@@ -1,16 +1,15 @@
 package com.company;
 
-import javax.sound.sampled.Clip;
-import javax.sound.sampled.LineUnavailableException;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
 
-import static java.lang.System.*;//bu satır sayesinde direkt out.println yazabiliyoruz.
+import static java.lang.System.*;
 
 public class AdamAsmaca {
+
 
     private final Hile hile = new Hile();
     private int kazanilanOyunSayisi = 0;
@@ -25,6 +24,9 @@ public class AdamAsmaca {
     private int kacHarfBulundu = 0;
 
     AdamAsmaca(String path) throws IOException {
+        out.println("                                                                               HOŞGELDİNİZ");
+        out.println("Enter ile Anamenüye devam edebilirsiniz.");
+        in.read();
         File kelimeDosyasi = new File(path);
         if (kelimeDosyasi.exists()) {
             Scanner scanner = new Scanner(kelimeDosyasi);
@@ -60,7 +62,10 @@ public class AdamAsmaca {
     }
 
     AdamAsmaca() throws IOException {
+        out.println("                                                                               HOŞGELDİNİZ");
 
+        out.println("Enter ile Anamenüye devam edebilirsiniz.");
+        in.read();
         String baslangicAdresi = getProperty("user.dir");
         File file = new File(baslangicAdresi + "\\kelime_veri_tabani.txt");
         String[] liste = {"araba", "zırh", "sofistik", "kelime", "pasaklı", "faktöriyel", "fişek", "pena", "kaval"};
@@ -104,19 +109,19 @@ public class AdamAsmaca {
         for (Character character : bulunanHarfler) {
 
             if (character != null) {
-                out.print(character);
-            } else out.print(" ");
+                out.print(" "+character);
+            } else out.print("  ");
         }
         out.println();
         out.print("                                                                    ");
         for (int i = 0; i < kelime.length(); i++) {
-            out.print("-");
+            out.print(" ¯");
         }
         out.println();
         if (kalanHak == 0) {
             if (!hile.herZamanKazan) {
                 out.println("Oyun Bitti\nKaybettiniz\nKelime : " + kelime);
-                OynananlaraYeniSatirEkle(kelime, false);
+                OynananlaraYeniSatirEkle(kelime, false,0);
                 out.println("                                                                               Yeni Oyuna Başlamak için 'Y'  \n                                                                               Anamenü için 'A'yazıp enterlayın.");
                 if (scn.next().equalsIgnoreCase("y")) {
                     out.println("                                                                               Yeni Oyun Başladı");
@@ -124,7 +129,7 @@ public class AdamAsmaca {
                 } else AnaMenu();
 
             } else {
-                OynananlaraYeniSatirEkle(kelime, true);
+                OynananlaraYeniSatirEkle(kelime, true,100);
             }
             AnaMenuSorgu();
         }
@@ -139,7 +144,10 @@ public class AdamAsmaca {
             } else if (girilenMetin.equals("kelimeyi_göster")) {
                 hile.KelimeyiGoster();
             }
-            else if(girilenMetin.length() == 1) {
+            else if(girilenMetin.toLowerCase().equals(kelime)){
+                OynananlaraYeniSatirEkle(kelime, true,(100/kelime.length())*(kelime.length()-kacHarfBulundu));
+            }
+            else if (girilenMetin.length() == 1) {
                 if (kelime.toLowerCase().contains(Character.toString(girilenHarf).toLowerCase())) {
                     if (!Arrays.asList(bulunanHarfler).contains(girilenHarf)) {
                         for (int i = 0; i < kelime.length(); i++) {
@@ -151,7 +159,7 @@ public class AdamAsmaca {
                     }
                     if (kacHarfBulundu == kelime.length()) {
                         out.println("                                                                               Oyun Bitti \n                                                                                Kazandınız.");
-                        OynananlaraYeniSatirEkle(kelime, true);
+                        OynananlaraYeniSatirEkle(kelime, true,10);
                         AdamCiz(9);
                         out.println("                                                                               Yeni Oyuna Başlamak için 'Y'  \n                                                                               Anamenü için 'A'yazıp enterlayın.");
                         if (scn.next().equalsIgnoreCase("y")) {
@@ -167,14 +175,14 @@ public class AdamAsmaca {
         }
     }//Neredeyse tüm iş buradan dönüyor
 
-    private void OynananlaraYeniSatirEkle(String kelime, Boolean kazandimi) {
-        String metin = "Kelime : " + kelime + " : ";
+    private void OynananlaraYeniSatirEkle(String kelime, Boolean kazandimi,int skor) {
+        String metin = "Kelime : " + kelime + " ; ";
         if (kazandimi) {
             kazanilanOyunSayisi++;
-            metin += "Kazandın";
+            metin += "  Puan : "+skor+" ; Kazandın ";
         } else {
             kaybedilenOyunSayisi++;
-            metin += "Kaybettin";
+            metin += " Kaybettin";
         }
         oynananKelimeler.add(metin);
     }
@@ -182,15 +190,15 @@ public class AdamAsmaca {
     private void OynananKelimeleriListele() throws IOException {
         BoslukSpam();
         if (oynananKelimeler.size() != 0) {
-            out.println("----------Kelimeler---------");
+            out.println("                                                                   ----------------------Kelimeler---------------------");
             for (String s : oynananKelimeler) {
-                out.println("     " + s);
+                out.println("                                                                           " + s);
             }
-            out.println("----------------------------");
-            out.println("Kazanılan Oyun Sayısı : " + kazanilanOyunSayisi);
-            out.println("Kaybedilen Oyun Sayısı : " + kaybedilenOyunSayisi);
+            out.println("                                                                   ----------------------------------------------------");
+            out.println("                                                                               Kazanılan Oyun Sayısı : " + kazanilanOyunSayisi);
+            out.println("                                                                               Kaybedilen Oyun Sayısı : " + kaybedilenOyunSayisi);
         } else {
-            out.println("Daha önce oyun oynamadın neyin peşindesin");
+            out.println("                                                                               Daha önce oyun oynamadın neyin peşindesin");
             AnaMenuSorgu();
         }
         AnaMenuSorgu();
@@ -246,11 +254,11 @@ public class AdamAsmaca {
 
     private void ListeAyarlari() throws IOException {
         BoslukSpam();
-        out.println("1-->    Kelime veritabanı yolunu güncelle ");
-        out.println("2-->    Geçerli veritabanına yeni kelime ekle");
-        out.println("3-->    Yeni veri tabanı oluştur");
-        out.println("4-->    Geçerli veritabanındaki kelimeleri listele");
-        out.println("5-->    Ana menüye Dön");
+        out.println("                                                               1-->    Kelime veritabanı yolunu güncelle ");
+        out.println("                                                               2-->    Geçerli veritabanına yeni kelime ekle");
+        out.println("                                                               3-->    Yeni veri tabanı oluştur");
+        out.println("                                                               4-->    Geçerli veritabanındaki kelimeleri listele");
+        out.println("                                                               5-->    Ana menüye Dön");
         CizgiSpam();
         String x = scn.nextLine();
         switch (x) {
@@ -268,14 +276,23 @@ public class AdamAsmaca {
         BoslukSpam();
         File file = new File(gecerliVeriYolu);
         var scanner = new Scanner(file);
-        out.println("-----------KELİMELER----------");
-        for (String s : kelimeListesi) {
-            out.println("|             " + s);
+        out.println("                                                                          -----------KELİMELER------------");
+        String x;
+        while (scanner.hasNextLine()){
+            x = scanner.next();
+            int a = (30-x.length())/2;
+            int b;
+            if(x.length()%2==0){
+                b= a;
+            }
+            else b = a+1;
+
+            out.println("                                                                          "+"|"+" ".repeat(a)+x+" ".repeat(b)+"|");
         }
-        out.println("------------------------------");
-        out.println("Toplam Kelime Sayısı : " + kelimeListesi.size());
-        out.println("------------------------------");
-        out.println("Veri tabanı konumu : " + gecerliVeriYolu);
+        out.println("                                                                          "+"--------------------------------");
+        out.println("                                                                          "+"Toplam Kelime Sayısı : " + kelimeListesi.size());
+        out.println("                                                                          "+"--------------------------------");
+        out.println("                                                                          "+"Veri tabanı konumu : " + gecerliVeriYolu);
         AnaMenuSorgu();
     }
 
@@ -344,22 +361,10 @@ public class AdamAsmaca {
             out.println("----------->");
             String a = scn.nextLine();
             switch (a) {
-                case "1" -> {
-                    VeriTabaninaYaz(x, false);
-                    break;
-                }
-                case "2" -> {
-                    VeriTabaninaYaz(x, true);
-                    break;
-                }
-                case "3" -> {
-                    YeniVeriTabani();
-                    break;
-                }
-                case "4" -> {
-                    AnaMenuSorgu();
-                    break;
-                }
+                case "1" -> VeriTabaninaYaz(x, false);
+                case "2" -> VeriTabaninaYaz(x, true);
+                case "3" -> YeniVeriTabani();
+                case "4" -> AnaMenuSorgu();
             }
             AnaMenuSorgu();
         } else {
@@ -420,7 +425,7 @@ public class AdamAsmaca {
         Boolean sonuc = null;
 
         while (true) {
-            out.println("Bu işlemi gerçekleştirmek istediğine eminmisin(EVET/HAYIR giriniz)");
+            out.println("(EVET/HAYIR giriniz)");
             String x = scn.nextLine().toUpperCase();
             if (x.equals("EVET")) {
                 sonuc = true;
@@ -429,8 +434,8 @@ public class AdamAsmaca {
                 sonuc = false;
                 break;
             }
-            out.println("Gerçekten ne yazman gerektiğini çözemedinmi ?");
             BoslukSpam();
+            out.println("Gerçekten ne yazman gerektiğini çözemedinmi ? (๑•̀ㅂ•́)و✧");
         }
         return sonuc;
     }
@@ -489,26 +494,26 @@ public class AdamAsmaca {
         out.println("                                                                                |                 |                                                                                ");
         out.println("                                                                                |                 |                                                                                ");
         out.println("                                                                                |                 |                                                                                ");
-        out.println("                                                                                 \\                /                                                                               ");
-        out.println("                                                                                  \\              /                                                                                ");
-        out.println("                                                                                   \\            /                                                                                 ");
-        out.println("                                                                                    \\          /                                                                                  ");
-        out.println("                                                                                     \\        /                                                                                   ");
-        out.println("                                                                                      \\      /                                                                                    ");
-        out.println("                                                                                       \\    /                                                                                     ");
-        out.println("                                                                                        \\  /                                                                                      ");
-        out.println("                                                                                         \\/                                                                                       ");
+        out.println("                                                                                \\                /                                                                                ");
+        out.println("                                                                                 \\              /                                                                                 ");
+        out.println("                                                                                  \\            /                                                                                  ");
+        out.println("                                                                                   \\          /                                                                                   ");
+        out.println("                                                                                    \\        /                                                                                    ");
+        out.println("                                                                                     \\      /                                                                                     ");
+        out.println("                                                                                      \\    /                                                                                      ");
+        out.println("                                                                                       \\  /                                                                                       ");
+        out.println("                                                                                        \\/                                                                                        ");
         out.println("                                                                                                                                                                                   ");
         out.println("                                                                                                                                                                                   ");
         out.println("                                                                                                                                                                                   ");
         out.println("                                                                                                                                                                                   ");
         out.println("                                                                                                                                                                                   ");
-    }//Üşenmesem bunu fonksiyonel hale getirebilirdim. İsteyen deneyebilir
+    }
 
     private void AnaMenuSorgu() throws IOException {
         out.println();
         out.println();
-        out.println("Ana menüye dönmek için enter a basın");
+        out.println("                                                                          "+"Ana menüye dönmek için enter a basın");
         in.read();
         AnaMenu();
     }
@@ -648,7 +653,7 @@ public class AdamAsmaca {
         }
 
         public void OyunuKazan() throws IOException {
-            OynananlaraYeniSatirEkle(kelime, true);
+            OynananlaraYeniSatirEkle(kelime, true,100);
             out.println("Cheat activated");
             AnaMenuSorgu();
         }
