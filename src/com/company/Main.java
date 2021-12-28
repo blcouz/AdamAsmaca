@@ -5,6 +5,7 @@ import java.io.IOException;
 public class Main {
 
     public static void main(String[] args) throws IOException {
-        AdamAsmaca adamAsmaca = new AdamAsmaca();
+        AdamAsmaca ac = new AdamAsmaca();
+        //AdamAsmaca adamAsmaca = new AdamAsmaca("C:\\Users\\oguzh\\Desktop\\sad.txt");
     }
 }
