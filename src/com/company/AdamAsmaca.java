@@ -30,9 +30,6 @@ public class AdamAsmaca {
     private int kacHarfBulundu = 0;
 
     AdamAsmaca(String path) throws IOException {
-        out.println("                                                                               HOŞGELDİNİZ");
-        out.println("Enter ile Anamenüye devam edebilirsiniz.");
-        in.read();
         File kelimeDosyasi = new File(path);
         if (kelimeDosyasi.exists()) {
             Scanner scanner = new Scanner(kelimeDosyasi);
