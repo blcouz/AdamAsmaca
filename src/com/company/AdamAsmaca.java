@@ -68,9 +68,6 @@ public class AdamAsmaca {
         String[] liste = {"araba", "zırh", "sofistik", "kelime", "pasaklı", "faktöriyel", "fişek", "pena", "kaval"};
         gecerliVeriYolu = file.getAbsolutePath();
         if (!file.exists()) {
-            BoslukSpam();
-            out.println("Fonksiyona veritabanı dizini göndermediğiniz için ben sizin yerinize bir tane oluşturuyorum..");
-            out.println("Yeni veri tabanını şu klasörün altına kaydediyorum : " + file.getAbsolutePath() + "(\nProje klasörünün altında kelime_listesi adında oluşan dosya senin veri tabanının olacak oradan ekleme silme yapabilirsin.\nEğer gözükmüyorsa sağ tık menüsünden refresle)");//Bu yorum satırdan hatalar gelebilir ama şuan uğraşamam.
             file.createNewFile();
             FileWriter fw = new FileWriter(file, false);
             BufferedWriter bw = new BufferedWriter(fw);
@@ -81,7 +78,6 @@ public class AdamAsmaca {
             bw.write(liste[liste.length - 1]);
             bw.close();
             VeriTabanindanKelimeListesiniDoldur(file.getAbsolutePath());
-            AnaMenuSorgu();
         } else {
             gecerliVeriYolu = file.getAbsolutePath();
             VeriTabanindanKelimeListesiniDoldur(gecerliVeriYolu);
@@ -90,12 +86,14 @@ public class AdamAsmaca {
 
     private void VeriTabanindanKelimeListesiniDoldur(String path) throws IOException {
         File fl = new File(path);
+
         Scanner kelimeCekici = new Scanner(fl);
         kelimeListesi.clear();
         while (kelimeCekici.hasNextLine()) {
             kelimeListesi.add(kelimeCekici.nextLine());
         }
         kelimeCekici.close();
+        AnaMenu();
     }
 
     private void Sor() throws IOException {
