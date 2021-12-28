@@ -336,6 +336,7 @@ public class AdamAsmaca {
         }
         kelimeListesi = veriTabanindakiKelimeler;
         out.println("İşlem tamamlandı");
+
     }
 
     private void YeniVeriTabani() throws IOException {
