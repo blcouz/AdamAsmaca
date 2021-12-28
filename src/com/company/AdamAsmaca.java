@@ -62,17 +62,15 @@ public class AdamAsmaca {
     }
 
     AdamAsmaca() throws IOException {
-        out.println("                                                                               HOŞGELDİNİZ");
 
-        out.println("Enter ile Anamenüye devam edebilirsiniz.");
-        in.read();
         String baslangicAdresi = getProperty("user.dir");
         File file = new File(baslangicAdresi + "\\kelime_veri_tabani.txt");
         String[] liste = {"araba", "zırh", "sofistik", "kelime", "pasaklı", "faktöriyel", "fişek", "pena", "kaval"};
-        gecerliVeriYolu = baslangicAdresi;
+        gecerliVeriYolu = file.getAbsolutePath();
         if (!file.exists()) {
+            BoslukSpam();
             out.println("Fonksiyona veritabanı dizini göndermediğiniz için ben sizin yerinize bir tane oluşturuyorum..");
-            out.println("Yeni veri tabanını şu klasörün altına kaydediyorum : " + file.getAbsolutePath() + "(\nEğer ide üzerinden çalıştırıyorsan ki eminim oradan çalıştırıyorsun proje klasörünün altında kelime_listesi (sola bak. ekranın solu) adında oluşan dosya senin veri tabanının olacak oradan ekleme silme yapabilirsin.)");//Bu yorum satırdan hatalar gelebilir ama şuan uğraşamam.
+            out.println("Yeni veri tabanını şu klasörün altına kaydediyorum : " + file.getAbsolutePath() + "(\nProje klasörünün altında kelime_listesi adında oluşan dosya senin veri tabanının olacak oradan ekleme silme yapabilirsin.\nEğer gözükmüyorsa sağ tık menüsünden refresle)");//Bu yorum satırdan hatalar gelebilir ama şuan uğraşamam.
             file.createNewFile();
             FileWriter fw = new FileWriter(file, false);
             BufferedWriter bw = new BufferedWriter(fw);
@@ -98,7 +96,6 @@ public class AdamAsmaca {
             kelimeListesi.add(kelimeCekici.nextLine());
         }
         kelimeCekici.close();
-        AnaMenu();
     }
 
     private void Sor() throws IOException {
@@ -109,7 +106,7 @@ public class AdamAsmaca {
         for (Character character : bulunanHarfler) {
 
             if (character != null) {
-                out.print(" "+character);
+                out.print(" " + character);
             } else out.print("  ");
         }
         out.println();
@@ -121,7 +118,7 @@ public class AdamAsmaca {
         if (kalanHak == 0) {
             if (!hile.herZamanKazan) {
                 out.println("Oyun Bitti\nKaybettiniz\nKelime : " + kelime);
-                OynananlaraYeniSatirEkle(kelime, false,0);
+                OynananlaraYeniSatirEkle(kelime, false, 0);
                 out.println("                                                                               Yeni Oyuna Başlamak için 'Y'  \n                                                                               Anamenü için 'A'yazıp enterlayın.");
                 if (scn.next().equalsIgnoreCase("y")) {
                     out.println("                                                                               Yeni Oyun Başladı");
@@ -129,7 +126,7 @@ public class AdamAsmaca {
                 } else AnaMenu();
 
             } else {
-                OynananlaraYeniSatirEkle(kelime, true,100);
+                OynananlaraYeniSatirEkle(kelime, true, 100);
             }
             AnaMenuSorgu();
         }
@@ -143,11 +140,9 @@ public class AdamAsmaca {
                 hile.Reset();
             } else if (girilenMetin.equals("kelimeyi_göster")) {
                 hile.KelimeyiGoster();
-            }
-            else if(girilenMetin.toLowerCase().equals(kelime)){
-                OynananlaraYeniSatirEkle(kelime, true,(100/kelime.length())*(kelime.length()-kacHarfBulundu));
-            }
-            else if (girilenMetin.length() == 1) {
+            } else if (girilenMetin.toLowerCase().equals(kelime)) {
+                OynananlaraYeniSatirEkle(kelime, true, (100 / kelime.length()) * (kelime.length() - kacHarfBulundu));
+            } else if (girilenMetin.length() == 1) {
                 if (kelime.toLowerCase().contains(Character.toString(girilenHarf).toLowerCase())) {
                     if (!Arrays.asList(bulunanHarfler).contains(girilenHarf)) {
                         for (int i = 0; i < kelime.length(); i++) {
@@ -159,7 +154,7 @@ public class AdamAsmaca {
                     }
                     if (kacHarfBulundu == kelime.length()) {
                         out.println("                                                                               Oyun Bitti \n                                                                                Kazandınız.");
-                        OynananlaraYeniSatirEkle(kelime, true,10);
+                        OynananlaraYeniSatirEkle(kelime, true, 10);
                         AdamCiz(9);
                         out.println("                                                                               Yeni Oyuna Başlamak için 'Y'  \n                                                                               Anamenü için 'A'yazıp enterlayın.");
                         if (scn.next().equalsIgnoreCase("y")) {
@@ -175,11 +170,11 @@ public class AdamAsmaca {
         }
     }//Neredeyse tüm iş buradan dönüyor
 
-    private void OynananlaraYeniSatirEkle(String kelime, Boolean kazandimi,int skor) {
+    private void OynananlaraYeniSatirEkle(String kelime, Boolean kazandimi, int skor) {
         String metin = "Kelime : " + kelime + " ; ";
         if (kazandimi) {
             kazanilanOyunSayisi++;
-            metin += "  Puan : "+skor+" ; Kazandın ";
+            metin += "  Puan : " + skor + " ; Kazandın ";
         } else {
             kaybedilenOyunSayisi++;
             metin += " Kaybettin";
@@ -278,21 +273,21 @@ public class AdamAsmaca {
         var scanner = new Scanner(file);
         out.println("                                                                          -----------KELİMELER------------");
         String x;
-        while (scanner.hasNextLine()){
+        while (scanner.hasNextLine()) {
             x = scanner.next();
-            int a = (30-x.length())/2;
+            int a = (30 - x.length()) / 2;
             int b;
-            if(x.length()%2==0){
-                b= a;
-            }
-            else b = a+1;
+            if (x.length() % 2 == 0) {
+                b = a;
+            } else b = a + 1;
 
-            out.println("                                                                          "+"|"+" ".repeat(a)+x+" ".repeat(b)+"|");
+            out.println("                                                                          " + "|" + " ".repeat(a) + x + " ".repeat(b) + "|");
         }
-        out.println("                                                                          "+"--------------------------------");
-        out.println("                                                                          "+"Toplam Kelime Sayısı : " + kelimeListesi.size());
-        out.println("                                                                          "+"--------------------------------");
-        out.println("                                                                          "+"Veri tabanı konumu : " + gecerliVeriYolu);
+        scanner.close();
+        out.println("                                                                          " + "--------------------------------");
+        out.println("                                                                          " + "Toplam Kelime Sayısı : " + kelimeListesi.size());
+        out.println("                                                                          " + "--------------------------------");
+        out.println("                                                                          " + "Veri tabanı konumu : " + gecerliVeriYolu);
         AnaMenuSorgu();
     }
 
@@ -513,7 +508,7 @@ public class AdamAsmaca {
     private void AnaMenuSorgu() throws IOException {
         out.println();
         out.println();
-        out.println("                                                                          "+"Ana menüye dönmek için enter a basın");
+        out.println("                                                                          " + "Ana menüye gitmek için enter a basın");
         in.read();
         AnaMenu();
     }
@@ -653,7 +648,7 @@ public class AdamAsmaca {
         }
 
         public void OyunuKazan() throws IOException {
-            OynananlaraYeniSatirEkle(kelime, true,100);
+            OynananlaraYeniSatirEkle(kelime, true, 100);
             out.println("Cheat activated");
             AnaMenuSorgu();
         }
