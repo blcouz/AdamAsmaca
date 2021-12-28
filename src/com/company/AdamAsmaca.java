@@ -181,7 +181,7 @@ public class AdamAsmaca {
             }
             Sor();
         }
-    }//Neredeyse tüm iş buradan dönüyor
+    }
 
     private void OynananlaraYeniSatirEkle(String kelime, Boolean kazandimi, int skor) {
         String metin = "Kelime : " + kelime + " ; ";
